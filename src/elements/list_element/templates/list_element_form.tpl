@@ -26,7 +26,7 @@
 </div>
 
 {* Shared functional image picker modal *}
-<div id="fimg-picker-modal" class="fimg-picker-modal" style="display:none;">
+<div id="fimg-picker-modal-{$id}" class="fimg-picker-modal" style="display:none;">
     <div class="fimg-picker-backdrop" onclick="closeFunctionalImagePicker();"></div>
     <div class="fimg-picker-content">
         <div class="fimg-picker-header">
@@ -34,9 +34,9 @@
             <button type="button" class="close-btn" onclick="closeFunctionalImagePicker();">&times;</button>
         </div>
         <div class="fimg-picker-search">
-            <input type="text" id="fimg-picker-search-input" placeholder="Zoeken..." oninput="filterFunctionalImagePicker(this.value)" />
+            <input type="text" id="fimg-picker-search-input-{$id}" placeholder="Zoeken..." oninput="filterFunctionalImagePicker(this.value)" />
         </div>
-        <div class="fimg-picker-tree" id="fimg-picker-tree">
+        <div class="fimg-picker-tree" id="fimg-picker-tree-{$id}">
             {include file="list_element/templates/fimg_picker_tree.tpl" folders=$fimg_picker_root_folders images=$fimg_picker_root_images}
             {if empty($fimg_picker_root_folders) && empty($fimg_picker_root_images)}
                 <div class="fimg-empty-state">Geen functionele afbeeldingen beschikbaar.</div>
@@ -47,18 +47,38 @@
 
 <script type="text/javascript">
 var _fimgPickerContext = null;
+var _fimgPickerModal = null;
 var _fimgAllImages = {$all_functional_images|@json_encode};
+
+// Register this list element's modal so openFunctionalImagePicker can find it by field name
+if (!window._fimgModalRegistry) { window._fimgModalRegistry = {}; }
+(function() {
+    var modalId = 'fimg-picker-modal-{$id}';
+    var $form = $('#element{$id}_add_item').closest('.admin_form_v2');
+    $form.find('.fimg-lookup input[type=hidden]').each(function() {
+        window._fimgModalRegistry[this.name] = modalId;
+    });
+})();
 
 function openFunctionalImagePicker(fieldName) {
     _fimgPickerContext = fieldName;
-    $('#fimg-picker-search-input').val('');
+    var modalId = window._fimgModalRegistry && window._fimgModalRegistry[fieldName];
+    var $modal = modalId ? $('#' + modalId) : $();
+    _fimgPickerModal = $modal;
+    $modal.find('[id^="fimg-picker-search-input"]').val('');
     filterFunctionalImagePicker('');
-    $('#fimg-picker-modal').show();
+    if ($modal.parent()[0] !== document.body) {
+        $modal.appendTo(document.body);
+    }
+    $modal.show();
 }
 
 function closeFunctionalImagePicker() {
     _fimgPickerContext = null;
-    $('#fimg-picker-modal').hide();
+    if (_fimgPickerModal) {
+        _fimgPickerModal.hide();
+        _fimgPickerModal = null;
+    }
 }
 
 function selectFunctionalImage(imageId, imageTitle) {
@@ -80,16 +100,15 @@ function clearFunctionalImageSelection(fieldName) {
 }
 
 function filterFunctionalImagePicker(query) {
+    var $tree = _fimgPickerModal ? _fimgPickerModal.find('.fimg-picker-tree') : $('.fimg-picker-tree').first();
     var q = query.toLowerCase();
     if (!q) {
-        // restore: show all items, all folders open (or closed as default)
-        $('#fimg-picker-tree .fimg-picker-item').show();
-        $('#fimg-picker-tree .fimg-folder').show();
+        $tree.find('.fimg-picker-item').show();
+        $tree.find('.fimg-folder').show();
         return;
     }
-    // Hide all folders first, show only items matching query and their ancestors
-    $('#fimg-picker-tree .fimg-folder').hide();
-    $('#fimg-picker-tree .fimg-picker-item').each(function () {
+    $tree.find('.fimg-folder').hide();
+    $tree.find('.fimg-picker-item').each(function () {
         var title = $(this).data('title').toLowerCase();
         if (title.indexOf(q) !== -1) {
             $(this).show();

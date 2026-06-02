@@ -77,7 +77,8 @@ class ListElementEditor extends ElementVisual {
                 "listitem_" . $listItem->getId() . "_functional_image_id",
                 null,
                 $functionalImageId,
-                $functionalImageTitle
+                $functionalImageTitle,
+                $this->listElement->getId()
             );
 
             $listItemValues['item_text_field'] = $itemTextField->render();

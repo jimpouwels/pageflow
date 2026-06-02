@@ -1,5 +1,5 @@
 <div class="fimg-lookup">
-    <input type="hidden" name="{$field_name}" id="{$field_name}" value="{$field_value}" />
+    <input type="hidden" name="{$field_name}" id="{$field_name}" value="{$field_value}" data-element-id="{$element_id}" />
     <div class="fimg-lookup-preview{if $field_value} has-image{/if}"
          onclick="openFunctionalImagePicker('{$field_name}');" title="Kies functionele afbeelding">
         <img class="fimg-lookup-thumb" src="{if $field_value}/admin/fimage/{$field_value}{/if}" alt="" />

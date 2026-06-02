@@ -192,17 +192,20 @@
 .fimg-lookup-clear-btn {
     display: none;
     position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.55);
+    top: 2px;
+    right: 2px;
+    width: 14px;
+    height: 14px;
+    background: rgba(0, 0, 0, 0.70);
     border: none;
     color: #fff;
-    font-size: 14px;
+    font-size: 9px;
     cursor: pointer;
     align-items: center;
     justify-content: center;
-    border-radius: 3px;
+    border-radius: 50%;
+    padding: 0;
+    z-index: 1;
 }
 
 .fimg-lookup-preview.has-image:hover .fimg-lookup-clear-btn {
