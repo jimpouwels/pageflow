@@ -12,7 +12,7 @@ class User extends Entity {
     private string $firstName;
     private string $prefix;
     private string $lastName;
-    private string $password;
+    private ?string $password = null;
     private string $uuid;
 
     public static function constructFromRecord(array $row): User {
@@ -31,7 +31,7 @@ class User extends Entity {
         parent::initFromDb($row);
     }
 
-    public function getPassword(): string {
+    public function getPassword(): ?string {
         return $this->password;
     }
 
