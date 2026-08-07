@@ -272,6 +272,9 @@ abstract class FrontendVisual {
                     $currentPos = $currentPos[$part];
                 }
             }
+            if (!$currentPos) {
+                continue;
+            }
             $text = str_replace($placeholder, $currentPos, $text);
         }
         return $text;
