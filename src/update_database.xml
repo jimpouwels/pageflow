@@ -349,6 +349,7 @@
             <query>CREATE TABLE functional_images (id INT UNSIGNED NOT NULL AUTO_INCREMENT, title TEXT NOT NULL, alt_text TEXT DEFAULT NULL, published TINYINT(1) NOT NULL DEFAULT 0, created_at DATETIME DEFAULT NULL, created_by INT UNSIGNED DEFAULT NULL, file_name LONGTEXT, folder_id INT UNSIGNED DEFAULT NULL, PRIMARY KEY (id), KEY fi_folder (folder_id), KEY fi_users (created_by), CONSTRAINT fi_folder FOREIGN KEY (folder_id) REFERENCES functional_image_folders (id) ON DELETE SET NULL ON UPDATE RESTRICT, CONSTRAINT fi_users FOREIGN KEY (created_by) REFERENCES auth_users (id) ON DELETE SET NULL ON UPDATE RESTRICT)</query>
             <query>ALTER TABLE list_element_items ADD COLUMN functional_image_id INT UNSIGNED DEFAULT NULL</query>
             <query>ALTER TABLE list_element_items ADD CONSTRAINT lei_functional_image FOREIGN KEY (functional_image_id) REFERENCES functional_images (id) ON DELETE SET NULL ON UPDATE RESTRICT</query>
+            <query>ALTER TABLE text_elements_metadata CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci</query>
         </queries>
     </version>
 </versions>
