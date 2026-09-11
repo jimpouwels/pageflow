@@ -10,7 +10,6 @@ use Pageflow\Core\modules\articles\model\ArticleMetadataField;
 use Pageflow\Core\modules\articles\model\ArticleMetadataFieldValue;
 use Pageflow\Core\modules\articles\model\ArticleTerm;
 use Pageflow\Core\modules\pages\model\Page;
-use const Pageflow\Core\ELEMENT_HOLDER_ARTICLE;
 
 class ArticleInteractor implements ArticleService {
 
@@ -42,7 +41,6 @@ class ArticleInteractor implements ArticleService {
         $newArticle->setTitle('Nieuw artikel');
         $newArticle->setName('Nieuw artikel');
         $newArticle->setCreatedById(Authenticator::getCurrentUser()->getId());
-        $newArticle->setType(ELEMENT_HOLDER_ARTICLE);
         $this->articleDao->createArticle($newArticle);
         return $newArticle;
     }

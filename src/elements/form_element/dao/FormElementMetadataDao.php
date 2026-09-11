@@ -1,14 +1,14 @@
 <?php
 
-namespace Pageflow\Core\elements\form_element;
+namespace Pageflow\Core\elements\form_element\dao;
 
 use Pageflow\Core\core\model\Element;
-use Pageflow\Core\core\model\ElementMetadataProvider;
+use Pageflow\Core\database\dao\ElementMetadataDao;
 use Pageflow\Core\database\dao\WebformDao;
 use Pageflow\Core\database\dao\WebformDaoMysql;
 use Pageflow\Core\database\MysqlConnector;
 
-class FormElementMetadataProvider extends ElementMetadataProvider
+class FormElementMetadataDao extends ElementMetadataDao
 {
 
     private WebformDao $webformDao;

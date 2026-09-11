@@ -3,8 +3,7 @@
 namespace Pageflow\Core\elements\iframe_element;
 
 use Pageflow\Core\core\model\Element;
-use Pageflow\Core\core\model\ElementMetadataProvider;
-use Pageflow\Core\database\MysqlConnector;
+use Pageflow\Core\elements\iframe_element\dao\IFrameElementMetadataDao;
 use Pageflow\Core\elements\iframe_element\visuals\IFrameElementEditor;
 use Pageflow\Core\elements\iframe_element\visuals\IFrameElementStatics;
 use Pageflow\Core\frontend\IFrameElementFrontendVisual;
@@ -12,7 +11,6 @@ use Pageflow\Core\modules\articles\model\Article;
 use Pageflow\Core\modules\blocks\model\Block;
 use Pageflow\Core\modules\pages\model\Page;
 use Pageflow\Core\request_handlers\HttpRequestHandler;
-use Pageflow\Core\view\TemplateEngine;
 use Pageflow\Core\view\views\ElementVisual;
 use Pageflow\Core\view\views\Visual;
 
@@ -23,7 +21,7 @@ class IFrameElement extends Element {
     private ?int $height = null;
 
     public function __construct(int $scopeId) {
-        parent::__construct($scopeId, new IFrameElementMetadataProvider($this));
+        parent::__construct($scopeId, new IFrameElementMetadataDao($this));
     }
 
     public function setUrl(?string $url): void {

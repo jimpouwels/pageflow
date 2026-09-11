@@ -1,12 +1,13 @@
 <?php
 
-namespace Pageflow\Core\elements\table_of_contents_element;
+namespace Pageflow\Core\elements\table_of_contents_element\dao;
 
 use Pageflow\Core\core\model\Element;
-use Pageflow\Core\core\model\ElementMetadataProvider;
+use Pageflow\Core\database\dao\ElementMetadataDao;
 use Pageflow\Core\database\MysqlConnector;
+use Pageflow\Core\elements\table_of_contents_element\TableOfContentsElement;
 
-class TableOfContentsElementMetadataProvider extends ElementMetadataProvider
+class TableOfContentsElementMetadataDao extends ElementMetadataDao
 {
 
     private MysqlConnector $mysqlConnector;

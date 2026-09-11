@@ -3,6 +3,7 @@
 namespace Pageflow\Core\elements\list_element;
 
 use Pageflow\Core\core\model\Element;
+use Pageflow\Core\elements\list_element\dao\ListElementMetaDataDao;
 use Pageflow\Core\elements\list_element\visuals\ListElementEditor;
 use Pageflow\Core\elements\list_element\visuals\ListElementStatics;
 use Pageflow\Core\frontend\FrontendVisual;
@@ -19,7 +20,7 @@ class ListElement extends Element {
     private array $listItems = array();
 
     public function __construct(int $scopeId) {
-        parent::__construct($scopeId, new ListElementMetaDataProvider($this));
+        parent::__construct($scopeId, new ListElementMetaDataDao($this));
     }
 
     public function getListItems(): array {
@@ -41,7 +42,7 @@ class ListElement extends Element {
         $this->listItems = array_filter($this->listItems, function ($listItem) use ($listItemToDelete) {
             return $listItem->getId() !== $listItemToDelete->getId();
         });
-        $this->getMetaDataProvider()->deleteListItem($listItemToDelete);
+        $this->getMetaDataDao()->deleteListItem($listItemToDelete);
     }
 
     public function getStatics(): Visual {

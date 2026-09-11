@@ -4,6 +4,7 @@ namespace Pageflow\Core\elements\image_element;
 
 use Pageflow\Core\core\model\Element;
 use Pageflow\Core\database\dao\ImageDaoMysql;
+use Pageflow\Core\elements\image_element\dao\ImageElementMetadataDao;
 use Pageflow\Core\elements\image_element\visuals\ImageElementEditor;
 use Pageflow\Core\elements\image_element\visuals\ImageElementStatics;
 use Pageflow\Core\frontend\ImageElementFrontendVisual;
@@ -25,7 +26,7 @@ class ImageElement extends Element {
     private ?string $link = null;
 
     public function __construct(int $scopeId) {
-        parent::__construct($scopeId, new ImageElementMetadataProvider($this));
+        parent::__construct($scopeId, new ImageElementMetadataDao($this));
     }
 
     public function setAlign(?string $align): void {

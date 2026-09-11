@@ -1,12 +1,12 @@
 <?php
 
-namespace Pageflow\Core\elements\separator_element;
+namespace Pageflow\Core\elements\separator_element\dao;
 
 use Pageflow\Core\core\model\Element;
-use Pageflow\Core\core\model\ElementMetadataProvider;
+use Pageflow\Core\database\dao\ElementMetadataDao;
 use Pageflow\Core\database\MysqlConnector;
 
-class SeparatorElementMetadataProvider extends ElementMetadataProvider
+class SeparatorElementMetadataDao extends ElementMetadataDao
 {
 
     private MysqlConnector $mysqlConnector;

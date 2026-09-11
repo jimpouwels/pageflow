@@ -9,6 +9,8 @@ interface PageService {
 
     public function getPageById(int $id): ?Page;
 
+    public function getPageByElementHolder(int $elementHolderId): ?Page;
+
     public function updatePage(Page $page): void;
 
     public function addSelectedBlocks(Page $page, array $selectedBlocks): void;

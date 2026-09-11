@@ -3,6 +3,7 @@
 namespace Pageflow\Core\modules\blocks\model;
 
 use Pageflow\Core\core\model\ElementHolder;
+use Pageflow\Core\core\model\ElementHolderType;
 use Pageflow\Core\database\dao\BlockDaoMysql;
 
 class Block extends ElementHolder {
@@ -11,7 +12,7 @@ class Block extends ElementHolder {
     private ?int $positionId = null;
 
     public function __construct() {
-        parent::__construct(self::$SCOPE);
+        parent::__construct(self::$SCOPE, ElementHolderType::BLOCK);
     }
 
     public static function constructFromRecord(array $row): Block {

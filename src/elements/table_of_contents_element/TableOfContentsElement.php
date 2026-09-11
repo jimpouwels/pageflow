@@ -3,8 +3,8 @@
 namespace Pageflow\Core\elements\table_of_contents_element;
 
 use Pageflow\Core\core\model\Element;
-use Pageflow\Core\core\model\ElementMetadataProvider;
 use Pageflow\Core\database\MysqlConnector;
+use Pageflow\Core\elements\table_of_contents_element\dao\TableOfContentsElementMetadataDao;
 use Pageflow\Core\elements\table_of_contents_element\visuals\TableOfContentsElementEditor;
 use Pageflow\Core\elements\table_of_contents_element\visuals\TableOfContentsElementStatics;
 use Pageflow\Core\frontend\FrontendVisual;
@@ -20,7 +20,7 @@ use Pageflow\Core\view\views\Visual;
 class TableOfContentsElement extends Element {
 
     public function __construct(int $scopeId) {
-        parent::__construct($scopeId, new TableOfContentsElementMetadataProvider($this));
+        parent::__construct($scopeId, new TableOfContentsElementMetadataDao($this));
     }
 
     public function getStatics(): Visual {

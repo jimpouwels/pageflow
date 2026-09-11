@@ -1,15 +1,15 @@
 <?php
 
-namespace Pageflow\Core\elements\article_overview_element;
+namespace Pageflow\Core\elements\article_overview_element\dao;
 
 use Pageflow\Core\core\model\Element;
-use Pageflow\Core\core\model\ElementMetadataProvider;
+use Pageflow\Core\database\dao\ElementMetadataDao;
 use Pageflow\Core\database\dao\ArticleDao;
 use Pageflow\Core\database\dao\ArticleDaoMysql;
 use Pageflow\Core\database\MysqlConnector;
 use Pageflow\Core\modules\articles\model\ArticleTerm;
 
-class ArticleOverviewElementMetadataProvider extends ElementMetadataProvider
+class ArticleOverviewElementMetadataDao extends ElementMetadataDao
 {
 
     private ArticleDao $articleDao;

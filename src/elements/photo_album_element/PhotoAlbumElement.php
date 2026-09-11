@@ -4,6 +4,7 @@ namespace Pageflow\Core\elements\photo_album_element;
 
 use Pageflow\Core\core\model\Element;
 use Pageflow\Core\database\dao\ImageDaoMysql;
+use Pageflow\Core\elements\photo_album_element\dao\PhotoAlbumElementMetadataDao;
 use Pageflow\Core\elements\photo_album_element\visuals\PhotoAlbumElementEditor;
 use Pageflow\Core\elements\photo_album_element\visuals\PhotoAlbumElementStatics;
 use Pageflow\Core\frontend\FrontendVisual;
@@ -20,7 +21,7 @@ class PhotoAlbumElement extends Element {
     private ?int $numberOfResults = null;
 
     public function __construct(int $scopeId) {
-        parent::__construct($scopeId, new PhotoAlbumElementMetadataProvider($this));
+        parent::__construct($scopeId, new PhotoAlbumElementMetadataDao($this));
     }
 
     public function setNumberOfResults(?int $numberOfResults): void {

@@ -3,6 +3,7 @@
 namespace Pageflow\Core\elements\separator_element;
 
 use Pageflow\Core\core\model\Element;
+use Pageflow\Core\elements\separator_element\dao\SeparatorElementMetadataDao;
 use Pageflow\Core\elements\separator_element\visuals\SeparatorElementEditor;
 use Pageflow\Core\elements\separator_element\visuals\SeparatorElementStatics;
 use Pageflow\Core\frontend\SeparatorElementFrontendVisual;
@@ -21,7 +22,7 @@ class SeparatorElement extends Element {
     private ?string $htmlId = null;
 
     public function __construct(int $scopeId) {
-        parent::__construct($scopeId, new SeparatorElementMetadataProvider($this));
+        parent::__construct($scopeId, new SeparatorElementMetadataDao($this));
     }
 
     public function setUrl(?string $url): void {

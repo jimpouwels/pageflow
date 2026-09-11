@@ -1,12 +1,12 @@
 <?php
 
-namespace Pageflow\Core\elements\iframe_element;
+namespace Pageflow\Core\elements\iframe_element\dao;
 
 use Pageflow\Core\core\model\Element;
-use Pageflow\Core\core\model\ElementMetadataProvider;
+use Pageflow\Core\database\dao\ElementMetadataDao;
 use Pageflow\Core\database\MysqlConnector;
 
-class IFrameElementMetadataProvider extends ElementMetadataProvider
+class IFrameElementMetadataDao extends ElementMetadataDao
 {
 
     private MysqlConnector $mysqlConnector;

@@ -8,11 +8,7 @@ use Pageflow\Core\view\TemplateData;
 use Pageflow\Core\view\views\Button;
 use Pageflow\Core\view\views\Panel;
 use Pageflow\Core\view\views\ReadonlyTextField;
-use Pageflow\Core\view\views\SingleCheckbox;
 use Pageflow\Core\view\views\TextField;
-use Pageflow\Core\view\views\UploadField;
-use const Pageflow\Core\ACTION_FORM_ID;
-use const Pageflow\Core\UPLOAD_DIR;
 
 class ImageMobileEditor extends Panel {
 

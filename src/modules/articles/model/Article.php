@@ -3,10 +3,10 @@
 namespace Pageflow\Core\modules\articles\model;
 
 use Pageflow\Core\core\model\ElementHolder;
+use Pageflow\Core\core\model\ElementHolderType;
 
 class Article extends ElementHolder {
 
-    const ElementHolderType = "ELEMENT_HOLDER_ARTICLE";
     private static int $SCOPE = 9;
     private ?string $description;
     private ?string $seoTitle = null;
@@ -20,11 +20,11 @@ class Article extends ElementHolder {
     private ?int $commentWebformId = null;
 
     public function __construct() {
-        parent::__construct(self::$SCOPE);
+        parent::__construct(self::$SCOPE, ElementHolderType::ARTICLE);
         $this->setPublished(false);
     }
 
-    public static function constructFromRecord($row): Article {
+    public static function constructFromRecord(array $row): Article {
         $article = new Article();
         $article->initFromDb($row);
         return $article;

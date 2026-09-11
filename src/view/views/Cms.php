@@ -28,8 +28,7 @@ class Cms extends Visual {
     }
 
     public function load(): void {
-        $isElementHolder = $this->moduleVisual && $this->moduleVisual->isElementHolder();
-        $navigation_menu = new NavigationMenu($this->moduleDao->getModuleGroups(), BlackBoard::$MODULE_ID, $isElementHolder);
+        $navigation_menu = new NavigationMenu($this->moduleDao->getModuleGroups(), BlackBoard::$MODULE_ID);
         $notification_bar = new NotificationBar();
         $currentUserIndicator = new CurrentUserIndicator();
 

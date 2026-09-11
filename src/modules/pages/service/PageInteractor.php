@@ -11,7 +11,6 @@ use Pageflow\Core\database\dao\PageDaoMysql;
 use Pageflow\Core\modules\pages\model\Page;
 use Pageflow\Core\modules\sitewide_pages\persistence\SitewideDao;
 use Pageflow\Core\modules\sitewide_pages\persistence\SitewideDaoMysql;
-use const Pageflow\Core\ELEMENT_HOLDER_PAGE;
 
 class PageInteractor implements PageService {
 
@@ -42,6 +41,10 @@ class PageInteractor implements PageService {
         return $this->pageDao->getPage($id);
     }
 
+    public function getPageByElementHolder(int $elementHolderId): ?Page {
+        return $this->pageDao->getPageByElementHolderId($elementHolderId);
+    }
+
     public function updatePage(Page $page): void {
         $this->pageDao->updatePage($page);
     }
@@ -56,7 +59,6 @@ class PageInteractor implements PageService {
         $newPage->setName(Session::getTextResource('new_page_default_title'));
         $user = Authenticator::getCurrentUser();
         $newPage->setCreatedById($user->getId());
-        $newPage->setType(ELEMENT_HOLDER_PAGE);
         $this->pageDao->persist($newPage);
 
         $parent = $this->pageDao->getPage($page->getId());

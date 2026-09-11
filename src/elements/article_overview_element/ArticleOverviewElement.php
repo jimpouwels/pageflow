@@ -4,6 +4,7 @@ namespace Pageflow\Core\elements\article_overview_element;
 
 use Pageflow\Core\core\model\Element;
 use Pageflow\Core\database\dao\ArticleDaoMysql;
+use Pageflow\Core\elements\article_overview_element\dao\ArticleOverviewElementMetadataDao;
 use Pageflow\Core\elements\article_overview_element\visuals\ArticleOverviewElementEditor;
 use Pageflow\Core\elements\article_overview_element\visuals\ArticleOverviewElementStatics;
 use Pageflow\Core\frontend\ArticleOverviewElementFrontendVisual;
@@ -31,7 +32,7 @@ class ArticleOverviewElement extends Element {
     private bool $includeCurrentArticle = false;
 
     public function __construct(int $scopeId) {
-        parent::__construct($scopeId, new ArticleOverviewElementMetadataProvider($this));
+        parent::__construct($scopeId, new ArticleOverviewElementMetadataDao($this));
         $this->terms = array();
     }
 

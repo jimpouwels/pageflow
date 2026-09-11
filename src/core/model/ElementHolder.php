@@ -5,6 +5,7 @@ namespace Pageflow\Core\core\model;
 use DateTime;
 use Pageflow\Core\database\dao\ElementDaoMysql;
 use Pageflow\Core\modules\templates\model\Presentable;
+use Pageflow\Core\core\model\ElementHolderType;
 
 class ElementHolder extends Presentable {
 
@@ -15,18 +16,19 @@ class ElementHolder extends Presentable {
     private int $createdById;
     private DateTime $lastModified;
     private array $elements = array();
-    private string $type;
+    private ElementHolderType $type;
     private int $version = 1;
 
-    public function __construct(int $scopeId) {
+    public function __construct(int $scopeId, ElementHolderType $type) {
         parent::__construct($scopeId);
+        $this->type = $type;
     }
 
     public static function constructFromRecord(array $row): ElementHolder {
-        $element_holder = new ElementHolder($row["scope_id"]);
-        $element_holder->initFromDb($row);
+        $elementHolder = new ElementHolder($row["scope_id"], ElementHolderType::from($row['type']));
+        $elementHolder->initFromDb($row);
 
-        return $element_holder;
+        return $elementHolder;
     }
 
     public function setCreatedById(int $createdById): void {
@@ -111,11 +113,11 @@ class ElementHolder extends Presentable {
         $this->elements = $elements;
     }
 
-    public function getType(): string {
+    public function getType(): ElementHolderType {
         return $this->type;
     }
 
-    public function setType(string $type): void {
+    public function setType(ElementHolderType $type): void {
         $this->type = $type;
     }
 
@@ -134,7 +136,7 @@ class ElementHolder extends Presentable {
         $this->setCreatedAt($row['created_at']);
         $this->setCreatedById($row['created_by']);
         $this->setLastModified(new DateTime($row['last_modified']));
-        $this->setType($row['type']);
+        $this->setType(ElementHolderType::from($row['type']));
         $this->setVersion((int)($row['version'] ?? 1));
         parent::initFromDb($row);
         $this->setElements(ElementDaoMysql::getInstance()->getElements($this));

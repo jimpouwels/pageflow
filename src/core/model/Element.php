@@ -3,6 +3,7 @@
 namespace Pageflow\Core\core\model;
 
 use Pageflow\Core\frontend\FrontendVisual;
+use Pageflow\Core\database\dao\ElementMetadataDao;
 use Pageflow\Core\modules\articles\model\Article;
 use Pageflow\Core\modules\blocks\model\Block;
 use Pageflow\Core\modules\pages\model\Page;
@@ -18,11 +19,11 @@ abstract class Element extends Presentable {
     private int $elementHolderId;
     private int $orderNr;
     private bool $includeInTableOfContents = false;
-    private ElementMetadataProvider $metadataProvider;
+    private ElementMetadataDao $metadataDao;
 
-    public function __construct(int $scopeId, ElementMetadataProvider $metadataProvider) {
+    public function __construct(int $scopeId, ElementMetadataDao $metadataProvider) {
         parent::__construct($scopeId);
-        $this->metadataProvider = $metadataProvider;
+        $this->metadataDao = $metadataProvider;
     }
 
     public static function constructFromRecord(array $record): Element {
@@ -50,7 +51,7 @@ abstract class Element extends Presentable {
     }
 
     public function initializeMetaData(): void {
-        $this->metadataProvider->loadMetaData();
+        $this->metadataDao->loadMetaData();
     }
 
     public function getTitle(): ?string {
@@ -82,7 +83,7 @@ abstract class Element extends Presentable {
     }
 
     public function updateMetaData(): void {
-        $this->metadataProvider->upsert($this);
+        $this->metadataDao->upsert($this);
     }
 
     public abstract function getStatics(): Visual;
@@ -95,7 +96,7 @@ abstract class Element extends Presentable {
 
     public abstract function getSummaryText(): string;
 
-    protected function getMetaDataProvider(): ElementMetadataProvider {
-        return $this->metadataProvider;
+    protected function getMetaDataDao(): ElementMetadataDao {
+        return $this->metadataDao;
     }
 }

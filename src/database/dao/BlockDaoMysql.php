@@ -7,7 +7,6 @@ use Pageflow\Core\database\MysqlConnector;
 use Pageflow\Core\modules\blocks\model\Block;
 use Pageflow\Core\modules\blocks\model\BlockPosition;
 use Pageflow\Core\modules\pages\model\Page;
-use const Pageflow\Core\ELEMENT_HOLDER_BLOCK;
 
 class BlockDaoMysql implements BlockDao {
 
@@ -102,7 +101,7 @@ class BlockDaoMysql implements BlockDao {
         return $positions;
     }
 
-    public function getBlockPosition($positionId): ?BlockPosition {
+    public function getBlockPosition(int $positionId): ?BlockPosition {
         if (!is_null($positionId) && $positionId != '') {
             $query = "SELECT * FROM block_positions WHERE id = " . $positionId;
             $result = $this->mysqlConnector->executeQuery($query);
@@ -113,7 +112,7 @@ class BlockDaoMysql implements BlockDao {
         return null;
     }
 
-    public function getBlock($id): ?Block {
+    public function getBlock(int $id): ?Block {
         $query = "SELECT " . self::$myAllColumns . " FROM element_holders e, blocks b WHERE e.id = " . $id
             . " AND e.id = b.element_holder_id";
         $result = $this->mysqlConnector->executeQuery($query);
@@ -129,18 +128,17 @@ class BlockDaoMysql implements BlockDao {
         $newBlock->setTitle('Nieuw block');
         $newBlock->setName('Nieuw block');
         $newBlock->setCreatedById(Authenticator::getCurrentUser()->getId());
-        $newBlock->setType(ELEMENT_HOLDER_BLOCK);
         $this->persistBlock($newBlock);
         return $newBlock;
     }
 
-    private function persistBlock($block): void {
+    private function persistBlock(Block $block): void {
         $this->elementHolderDao->persist($block);
         $query = "INSERT INTO blocks (position_id, element_holder_id) VALUES (NULL, " . $block->getId() . ")";
         $this->mysqlConnector->executeQuery($query);
     }
 
-    public function updateBlock($block): void {
+    public function updateBlock(Block $block): void {
         $query = "UPDATE blocks SET";
         if ($block->getPositionId() != '' && !is_null($block->getPositionId())) {
             $query = $query . " position_id = " . $block->getPositionId();
@@ -152,7 +150,7 @@ class BlockDaoMysql implements BlockDao {
         $this->elementHolderDao->update($block);
     }
 
-    public function deleteBlock($block): void {
+    public function deleteBlock(Block $block): void {
         $this->elementHolderDao->delete($block);
     }
 
@@ -167,7 +165,7 @@ class BlockDaoMysql implements BlockDao {
         return $newPosition;
     }
 
-    public function getBlockPositionByName($positionName): ?BlockPosition {
+    public function getBlockPositionByName(string $positionName): ?BlockPosition {
         if (!is_null($positionName) && $positionName != '') {
             $query = "SELECT * FROM block_positions WHERE name = '" . $positionName . "'";
             $result = $this->mysqlConnector->executeQuery($query);
@@ -178,29 +176,29 @@ class BlockDaoMysql implements BlockDao {
         return null;
     }
 
-    private function persistBlockPosition($position): void {
+    private function persistBlockPosition(BlockPosition $position): void {
         $query = "INSERT INTO block_positions (name, explanation) VALUES  ('" . $position->getName() . "', NULL)";
         $this->mysqlConnector->executeQuery($query);
         $position->setId($this->mysqlConnector->getInsertId());
     }
 
-    public function updateBlockPosition($position): void {
+    public function updateBlockPosition(BlockPosition $position): void {
         $query = "UPDATE block_positions SET name = '" . $position->getName() . "'
                      , explanation = '" . $position->getExplanation() . "' WHERE id = " . $position->getId();
         $this->mysqlConnector->executeQuery($query);
     }
 
-    public function deleteBlockPosition($position): void {
+    public function deleteBlockPosition(BlockPosition $position): void {
         $query = "DELETE FROM block_positions WHERE id = " . $position->getId();
         $this->mysqlConnector->executeQuery($query);
     }
 
-    public function addBlockToPage($blockId, $page): void {
+    public function addBlockToPage(int $blockId, Page $page): void {
         $query = "INSERT INTO blocks_pages (page_id, block_id) VALUES (" . $page->getId() . ", " . $blockId . ")";
         $this->mysqlConnector->executeQuery($query);
     }
 
-    public function deleteBlockFromPage($blockId, $page): void {
+    public function deleteBlockFromPage(int $blockId, Page $page): void {
         $query = "DELETE FROM blocks_pages WHERE page_id = " . $page->getId() . "
                       AND block_id = " . $blockId;
         $this->mysqlConnector->executeQuery($query);

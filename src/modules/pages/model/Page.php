@@ -3,10 +3,10 @@
 namespace Pageflow\Core\modules\pages\model;
 
 use Pageflow\Core\core\model\ElementHolder;
+use Pageflow\Core\core\model\ElementHolderType;
 
 class Page extends ElementHolder {
 
-    const ElementHolderType = "ELEMENT_HOLDER_PAGE";
     private static int $SCOPE = 5;
     private ?string $description = null;
     private ?string $seoTitle = null;
@@ -20,7 +20,7 @@ class Page extends ElementHolder {
     private bool $isHomepage;
 
     public function __construct() {
-        parent::__construct(self::$SCOPE);
+        parent::__construct(self::$SCOPE, ElementHolderType::PAGE);
     }
 
     public static function constructFromRecord(array $row): Page {

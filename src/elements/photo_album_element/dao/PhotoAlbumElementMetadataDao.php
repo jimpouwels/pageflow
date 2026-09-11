@@ -1,24 +1,20 @@
 <?php
 
-namespace Pageflow\Core\elements\photo_album_element;
+namespace Pageflow\Core\elements\photo_album_element\dao;
 
 use Pageflow\Core\core\model\Element;
-use Pageflow\Core\core\model\ElementMetadataProvider;
-use Pageflow\Core\database\dao\ImageDao;
-use Pageflow\Core\database\dao\ImageDaoMysql;
+use Pageflow\Core\database\dao\ElementMetadataDao;
 use Pageflow\Core\database\MysqlConnector;
 
-class PhotoAlbumElementMetadataProvider extends ElementMetadataProvider
+class PhotoAlbumElementMetadataDao extends ElementMetadataDao
 {
 
     private MysqlConnector $mysqlConnector;
-    private ImageDao $imageDao;
     private Element $element;
 
     public function __construct(Element $element) {
         parent::__construct($element);
         $this->element = $element;
-        $this->imageDao = ImageDaoMysql::getInstance();
         $this->mysqlConnector = MysqlConnector::getInstance();
     }
 

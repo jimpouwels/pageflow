@@ -1,10 +1,11 @@
 <?php
 
-namespace Pageflow\Core\core\model;
+namespace Pageflow\Core\database\dao;
 
+use Pageflow\Core\core\model\Element;
 use Pageflow\Core\database\MysqlConnector;
 
-abstract class ElementMetadataProvider {
+abstract class ElementMetadataDao {
 
     private Element $element;
     private MysqlConnector $_mysql_connector;

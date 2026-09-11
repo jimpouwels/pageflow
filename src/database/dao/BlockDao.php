@@ -19,25 +19,25 @@ interface BlockDao {
 
     public function getBlockPositions(): array;
 
-    public function getBlockPosition($positionId): ?BlockPosition;
+    public function getBlockPosition(int $positionId): ?BlockPosition;
 
-    public function getBlock($id): ?Block;
+    public function getBlock(int $id): ?Block;
 
     public function createBlock(): Block;
 
-    public function updateBlock($block): void;
+    public function updateBlock(Block $block): void;
 
-    public function deleteBlock($block): void;
+    public function deleteBlock(Block $block): void;
 
     public function createBlockPosition(): BlockPosition;
 
-    public function getBlockPositionByName($positionName): ?BlockPosition;
+    public function getBlockPositionByName(string $positionName): ?BlockPosition;
 
-    public function updateBlockPosition($position): void;
+    public function updateBlockPosition(BlockPosition $position): void;
 
-    public function deleteBlockPosition($position): void;
+    public function deleteBlockPosition(BlockPosition $position): void;
 
-    public function addBlockToPage($blockId, $page): void;
+    public function addBlockToPage(int $blockId, Page $page): void;
 
-    public function deleteBlockFromPage($blockId, $page): void;
+    public function deleteBlockFromPage(int $blockId, Page $page): void;
 }

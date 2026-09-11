@@ -3,8 +3,7 @@
 namespace Pageflow\Core\elements\text_element;
 
 use Pageflow\Core\core\model\Element;
-use Pageflow\Core\core\model\ElementMetadataProvider;
-use Pageflow\Core\database\MysqlConnector;
+use Pageflow\Core\elements\text_element\dao\TextElementMetadataDao;
 use Pageflow\Core\elements\text_element\visuals\TextElementEditor;
 use Pageflow\Core\elements\text_element\visuals\TextElementStatics;
 use Pageflow\Core\frontend\FrontendVisual;
@@ -13,7 +12,6 @@ use Pageflow\Core\modules\articles\model\Article;
 use Pageflow\Core\modules\blocks\model\Block;
 use Pageflow\Core\modules\pages\model\Page;
 use Pageflow\Core\request_handlers\HttpRequestHandler;
-use Pageflow\Core\view\TemplateEngine;
 use Pageflow\Core\view\views\ElementVisual;
 use Pageflow\Core\view\views\Visual;
 
@@ -22,7 +20,7 @@ class TextElement extends Element {
     private ?string $text = null;
 
     public function __construct(int $scopeId) {
-        parent::__construct($scopeId, new TextElementMetadataProvider($this));
+        parent::__construct($scopeId, new TextElementMetadataDao($this));
     }
 
     public function setText(?string $text): void {

@@ -2,24 +2,17 @@
 
 namespace Pageflow\Core\view\views;
 
-use Pageflow\Core\core\BlackBoard;
 use Pageflow\Core\core\model\ModuleGroup;
-use Pageflow\Core\database\dao\ElementDao;
-use Pageflow\Core\database\dao\ElementDaoMysql;
 
 class NavigationMenu extends Visual {
 
     private array $moduleGroups;
-    private ElementDao $elementDao;
     private ?int $activeModuleId;
-    private bool $isElementHolder;
 
-    public function __construct(array $moduleGroups, ?int $activeModuleId = null, bool $isElementHolder = false) {
+    public function __construct(array $moduleGroups, ?int $activeModuleId = null) {
         parent::__construct();
         $this->moduleGroups = $moduleGroups;
-        $this->elementDao = ElementDaoMysql::getInstance();
         $this->activeModuleId = $activeModuleId;
-        $this->isElementHolder = $isElementHolder;
     }
 
     public function getTemplateFilename(): string {

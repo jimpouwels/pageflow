@@ -1,18 +1,19 @@
 <?php
 
-namespace Pageflow\Core\elements\text_element;
+namespace Pageflow\Core\elements\text_element\dao;
 
 use Pageflow\Core\core\model\Element;
-use Pageflow\Core\core\model\ElementMetadataProvider;
+use Pageflow\Core\database\dao\ElementMetadataDao;
 use Pageflow\Core\database\MysqlConnector;
+use Pageflow\Core\elements\text_element\TextElement;
 
-class TextElementMetadataProvider extends ElementMetadataProvider
+class TextElementMetadataDao extends ElementMetadataDao
 {
 
     private MysqlConnector $mysqlConnector;
 
-    public function __construct(TextElement $textElement) {
-        parent::__construct($textElement);
+    public function __construct(TextElement $element) {
+        parent::__construct($element);
         $this->mysqlConnector = MysqlConnector::getInstance();
     }
 
@@ -20,7 +21,7 @@ class TextElementMetadataProvider extends ElementMetadataProvider
         return "text_elements_metadata";
     }
 
-    public function constructMetaData(array $record, $element): void {
+    public function constructMetaData(array $record, Element $element): void {
         $element->setTitle($record['title']);
         $element->setText($record['text']);
     }

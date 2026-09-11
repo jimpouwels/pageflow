@@ -3,10 +3,7 @@
 namespace Pageflow\Core\elements\form_element;
 
 use Pageflow\Core\core\model\Element;
-use Pageflow\Core\core\model\ElementMetadataProvider;
-use Pageflow\Core\database\dao\WebformDao;
-use Pageflow\Core\database\dao\WebformDaoMysql;
-use Pageflow\Core\database\MysqlConnector;
+use Pageflow\Core\elements\form_element\dao\FormElementMetadataDao;
 use Pageflow\Core\elements\form_element\visuals\FormElementEditor;
 use Pageflow\Core\elements\form_element\visuals\FormElementStatics;
 use Pageflow\Core\frontend\ElementFrontendVisual;
@@ -16,7 +13,6 @@ use Pageflow\Core\modules\blocks\model\Block;
 use Pageflow\Core\modules\pages\model\Page;
 use Pageflow\Core\modules\webforms\model\Webform;
 use Pageflow\Core\request_handlers\HttpRequestHandler;
-use Pageflow\Core\view\TemplateEngine;
 use Pageflow\Core\view\views\ElementVisual;
 use Pageflow\Core\view\views\Visual;
 
@@ -25,7 +21,7 @@ class FormElement extends Element {
     private ?WebForm $webform = null;
 
     public function __construct(int $scopeId) {
-        parent::__construct($scopeId, new FormElementMetadataProvider($this));
+        parent::__construct($scopeId, new FormElementMetadataDao($this));
     }
 
     public function setWebForm(?WebForm $webform): void {
