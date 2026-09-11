@@ -37,6 +37,8 @@ interface ArticleService {
 
     public function searchArticles(?string $searchQuery, ?int $termId): array;
 
+    public function getArticlesWhereImageIsUsedAsWallpaperOrLeadImage(int $imageId): array;
+
     public function getAllArticles(): array;
 
     public function getTerm(string $name): ArticleTerm;

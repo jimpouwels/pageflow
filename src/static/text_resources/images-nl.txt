@@ -47,6 +47,7 @@ images_usage_viewer_article_type: Artikel
 images_usage_viewer_page_type: Pagina
 images_usage_viewer_block_type: Blok
 image_usage_viewer_title: Gebruikt in
+image_usage_viewer_empty_text: Deze afbeelding wordt nog nergens gebruikt
 
 # CONFIRMATIONS
 images_confirm_delete_image: Weet u zeker dat u deze afbeelding wilt verwijderen?

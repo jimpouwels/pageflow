@@ -9,9 +9,9 @@ use Pageflow\Core\modules\articles\model\ArticleTerm;
 use Pageflow\Core\modules\pages\model\Page;
 
 interface ArticleDao {
-    public function getArticle($id): ?Article;
+    public function getArticle(int $id): ?Article;
 
-    public function getArticleByElementHolderId($elementHolderId): ?Article;
+    public function getArticleByElementHolderId(int $elementHolderId): ?Article;
 
     public function getAllArticles(): array;
 
@@ -20,6 +20,8 @@ interface ArticleDao {
     public function searchArticles(string $keyword, ?int $termId = null): array;
 
     public function getRandomArticles(?int $exclude, bool $published, int $numberOfResults, ?array $terms): array;
+
+    public function getArticlesWhereImageIsUsedAsWallpaperOrLeadImage(int $imageId): array;
 
     public function advancedSearchArticles(?string $fromDate, ?string $toDate, ?string $orderBy, ?string $orderType, ?array $terms, ?int $maxResults, ?int $siblingsOnlyId, bool $published, ?int $exclude): array;
 

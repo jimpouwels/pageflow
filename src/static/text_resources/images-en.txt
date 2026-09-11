@@ -47,6 +47,7 @@ images_usage_viewer_article_type: Article
 images_usage_viewer_page_type: Page
 images_usage_viewer_block_type: Block
 image_usage_viewer_title: Used in
+image_usage_viewer_empty_text: This image is not used anywhere yet
 
 # CONFIRMATIONS
 images_confirm_delete_image: Are you sure you want to delete this image?

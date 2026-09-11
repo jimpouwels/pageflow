@@ -49,6 +49,10 @@ class ArticleInteractor implements ArticleService {
         $this->articleDao->deleteArticle($article);
     }
 
+    public function getArticlesWhereImageIsUsedAsWallpaperOrLeadImage(int $imageId): array {
+        return $this->articleDao->getArticlesWhereImageIsUsedAsWallpaperOrLeadImage($imageId);
+    }
+
     public function getTermsForArticle(Article $article): array {
         return $this->articleDao->getTermsForArticle($article->getId());
     }

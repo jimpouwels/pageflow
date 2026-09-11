@@ -34,7 +34,7 @@ class ArticleDaoMysql implements ArticleDao {
         return self::$instance;
     }
 
-    public function getArticle($id): ?Article {
+    public function getArticle(int $id): ?Article {
         $statement = $this->mysqlConnector->prepareStatement("SELECT " . self::$myAllColumns . " FROM
                                                                     element_holders e, articles a WHERE e.id = ?
                                                                     AND e.id = a.element_holder_id");
@@ -46,7 +46,7 @@ class ArticleDaoMysql implements ArticleDao {
         return null;
     }
 
-    public function getArticleByElementHolderId($elementHolderId): ?Article {
+    public function getArticleByElementHolderId(int $elementHolderId): ?Article {
         $statement = $this->mysqlConnector->prepareStatement("SELECT " . self::$myAllColumns . " FROM
                                                                     element_holders e, articles a WHERE a.element_holder_id = ?
                                                                     AND e.id = a.element_holder_id");
@@ -73,6 +73,19 @@ class ArticleDaoMysql implements ArticleDao {
         $query = "SELECT " . self::$myAllColumns . " FROM element_holders e, articles a WHERE e.id = a.element_holder_id
                       AND parent_article_id = " . $parentArticleId . " order by created_at DESC";
         $result = $this->mysqlConnector->executeQuery($query);
+        $articles = array();
+        while ($row = $result->fetch_assoc()) {
+            $articles[] = Article::constructFromRecord($row);
+        }
+        return $articles;
+    }
+
+    public function getArticlesWhereImageIsUsedAsWallpaperOrLeadImage(int $imageId): array {
+        $statement = $this->mysqlConnector->prepareStatement("SELECT " . self::$myAllColumns . " FROM
+                                                                    element_holders e, articles a WHERE e.id = a.element_holder_id
+                                                                    AND (a.image_id = ? OR a.wallpaper_id = ?)");
+        $statement->bind_param("ii", $imageId, $imageId);
+        $result = $this->mysqlConnector->executeStatement($statement);
         $articles = array();
         while ($row = $result->fetch_assoc()) {
             $articles[] = Article::constructFromRecord($row);

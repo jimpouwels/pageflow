@@ -38,6 +38,11 @@ class ArticleDaoMock implements ArticleDao {
         return [];
     }
 
+    public function getArticlesWhereImageIsUsedAsWallpaperOrLeadImage(int $imageId): array {
+        // TODO: Implement getArticlesWhereImageIsUsedAsWallpaperOrLeadImage() method.
+        return [];
+    }
+
     public function searchArticles(string $keyword, ?int $termId): array {
         // TODO: Implement searchArticles() method.
         return [];

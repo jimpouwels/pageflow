@@ -239,3 +239,61 @@
 #image-editor-form input[type="file"]::file-selector-button {
     display: none;
 }
+
+/* IMAGE USAGE VIEWER */
+.image-usage-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    border: 1px solid var(--color-gray-200, #e5e7eb);
+    border-radius: 6px;
+    overflow: hidden;
+}
+
+.image-usage-list-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 12px;
+    background: var(--color-white, #fff);
+    border-bottom: 1px solid var(--color-gray-100, #f3f4f6);
+}
+
+.image-usage-list-item:last-child {
+    border-bottom: none;
+}
+
+.image-usage-list-item:hover {
+    background: var(--color-gray-50, #f9fafb);
+}
+
+.image-usage-list-item-type {
+    flex-shrink: 0;
+    padding: 2px 8px;
+    border-radius: 10px;
+    background: var(--color-gray-100, #f3f4f6);
+    color: var(--color-gray-600, #4b5563);
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+}
+
+.image-usage-list-item-link {
+    font-size: 13px;
+    color: var(--color-primary, #2271b1);
+    text-decoration: none;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.image-usage-list-item-link:hover {
+    text-decoration: underline;
+}
+
+.image-usage-list-empty {
+    padding: 12px 14px;
+    color: var(--color-gray-500, #6b7280);
+    font-size: 13px;
+}
