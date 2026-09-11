@@ -43,6 +43,10 @@ image_crop_cannot_be_bigger_than_width: The horizontal crop cannot be bigger tha
 images_save_success_message: Image successfully saved
 images_save_failed_message: Image not saved, process the errors
 images_image_editor_no_image_found_yet_message: No image uploaded yet
+images_usage_viewer_article_type: Article
+images_usage_viewer_page_type: Page
+images_usage_viewer_block_type: Block
+image_usage_viewer_title: Used in
 
 # CONFIRMATIONS
 images_confirm_delete_image: Are you sure you want to delete this image?

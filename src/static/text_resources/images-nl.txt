@@ -43,6 +43,10 @@ image_mobile_copy_from_desktop: Kopiëer van desktop versie
 images_save_success_message: Afbeelding succesvol opgeslagen
 images_save_failed_message: Afbeelding niet opgeslagen, verwerk de fouten
 images_image_editor_no_image_found_yet_message: Nog geen afbeelding geuploaded
+images_usage_viewer_article_type: Artikel
+images_usage_viewer_page_type: Pagina
+images_usage_viewer_block_type: Blok
+image_usage_viewer_title: Gebruikt in
 
 # CONFIRMATIONS
 images_confirm_delete_image: Weet u zeker dat u deze afbeelding wilt verwijderen?
