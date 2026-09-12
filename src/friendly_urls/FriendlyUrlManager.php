@@ -148,6 +148,9 @@ class FriendlyUrlManager {
             $subArray = array_slice($urlParts, $i + 1, count($urlParts));
             $articlePartOfUrl = '/' . implode('/', $subArray);
             $elementHolderId = $this->friendlyUrlDao->getElementHolderIdFromUrl($articlePartOfUrl);
+            if (!$elementHolderId) {
+                continue;
+            }
             $article = $this->articleDao->getArticleByElementHolderId($elementHolderId);
             if ($article) {
                 $matchedUrl = $articlePartOfUrl;
