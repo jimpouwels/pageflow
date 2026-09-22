@@ -44,6 +44,7 @@ class TemplateFilesTab extends Visual {
         if ($this->currentTemplateFile) {
             $codeViewerHtml = $this->renderTemplateCodeViewer();
         }
+        $this->assign("template_code_editor", $this->renderTemplateCodeEditor());
         $this->assign("template_code_viewer", $codeViewerHtml);
     }
 
@@ -57,6 +58,10 @@ class TemplateFilesTab extends Visual {
 
     private function renderTemplateCodeViewer(): string {
         return (new TemplateFileCodeViewer($this->currentTemplateFile))->render();
+    }
+
+    private function renderTemplateCodeEditor(): string {
+        return (new TemplateFileCodeEditor($this->currentTemplateFile))->render();
     }
 
 }

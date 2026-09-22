@@ -189,6 +189,10 @@ abstract class FrontendVisual {
         return $this->templateEngine->fetch($templateFilename, $templateData == null ? $this->templateData : $templateData);
     }
 
+    protected function fetchCode(string $code, ?TemplateData $templateData = null): string {
+        return $this->templateEngine->fetch('string:' . $code, $templateData == null ? $this->templateData : $templateData);
+    }
+
     protected function toHtml(?string $value): string {
         if (!$value) {
             return "";

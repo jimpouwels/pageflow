@@ -31,6 +31,7 @@ class TemplateFileForm extends Form {
         $id = $this->templateFile->getId();
         $this->templateFile->setName($this->getMandatoryFieldValue("template_file_{$id}_name_field"));
         $this->templateFile->setFileName($this->getFieldValue("template_file_{$id}_filename_field"));
+        $this->templateFile->setCode($this->getFieldValue("template_file_{$id}_code_field"));
 
         $this->parseVarDefs = $this->parseVarDefs();
 
@@ -78,7 +79,7 @@ class TemplateFileForm extends Form {
 
     private function parseVarDefs(): array {
         $parsedVarDefs = array();
-        $code = $this->templateFile->getCode();
+        $code = $this->templateFile->getTemplateFileCode();
         $matches = null;
         preg_match_all('/\$var\.(.*?)[\ })|]/', $code, $matches);
 

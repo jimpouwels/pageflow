@@ -10,6 +10,7 @@ class TemplateFile extends Entity {
 
     private ?string $fileName = null;
     private string $name;
+    private ?string $code;
     private array $templateVarDefs = array();
 
     public static function constructFromRecord(array $row): TemplateFile {
@@ -21,6 +22,7 @@ class TemplateFile extends Entity {
     protected function initFromDb(array $row): void {
         $this->setFileName($row['filename']);
         $this->setName($row['name']);
+        $this->setCode($row['code']);
         parent::initFromDb($row);
         $this->setTemplateVarDefs(TemplateDaoMysql::getInstance()->getTemplateVarDefs($this));
     }
@@ -34,6 +36,10 @@ class TemplateFile extends Entity {
     }
 
     public function getCode(): string {
+        return $this->code;
+    }
+
+    public function getTemplateFileCode(): ?string {
         $code = "";
         $filepath = FRONTEND_TEMPLATE_DIR . '/' . $this->getFilename();
         if (is_file($filepath) && file_exists($filepath)) {
@@ -60,6 +66,10 @@ class TemplateFile extends Entity {
 
     public function setName(string $name): void {
         $this->name = $name;
+    }
+
+    public function setCode(?string $code): void {
+        $this->code = $code;
     }
 
     public function addTemplateVarDef(TemplateVarDef $templateVarDef): void {

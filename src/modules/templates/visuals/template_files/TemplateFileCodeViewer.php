@@ -11,7 +11,7 @@ class TemplateFileCodeViewer extends Panel {
     private TemplateFile $templateFile;
 
     public function __construct(TemplateFile $templateFile) {
-        parent::__construct('Markup', 'template_content_panel');
+        parent::__construct($this->getTextResource('template_files.code_viewer.panel_title'), 'template_content_panel');
         $this->templateFile = $templateFile;
     }
 
@@ -24,7 +24,7 @@ class TemplateFileCodeViewer extends Panel {
     }
 
     private function getTemplateCode(): ?string {
-        return htmlspecialchars($this->templateFile->getCode());
+        return htmlspecialchars($this->templateFile->getTemplateFileCode());
     }
 
 }

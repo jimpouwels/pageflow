@@ -49,3 +49,25 @@
 .template_content_panel .markup {
     color: gray;
 }
+
+.template_content_panel .admin_form_field_v2 {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+}
+
+.template_content_panel .admin_label_wrapper {
+    display: none;
+}
+
+.template_content_panel .admin_field_wrapper {
+    max-width: none;
+    width: 100%;
+}
+
+.template_content_panel .code_editor {
+    width: 100%;
+    min-height: 220px;
+    field-sizing: content;
+    box-sizing: border-box;
+}

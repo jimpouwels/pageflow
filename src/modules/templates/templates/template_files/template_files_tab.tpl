@@ -7,6 +7,7 @@
     <div class="content_right_column">
         {$template_file_editor}
         {$template_var_migration}
+        {$template_code_editor}
         {$template_code_viewer}
     </div>
 </form>

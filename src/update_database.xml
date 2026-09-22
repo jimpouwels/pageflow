@@ -350,6 +350,7 @@
             <query>ALTER TABLE list_element_items ADD COLUMN functional_image_id INT UNSIGNED DEFAULT NULL</query>
             <query>ALTER TABLE list_element_items ADD CONSTRAINT lei_functional_image FOREIGN KEY (functional_image_id) REFERENCES functional_images (id) ON DELETE SET NULL ON UPDATE RESTRICT</query>
             <query>ALTER TABLE text_elements_metadata CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci</query>
+            <query>ALTER TABLE template_files ADD COLUMN code LONGTEXT NOT NULL</query>
         </queries>
     </version>
 </versions>
