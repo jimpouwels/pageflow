@@ -28,7 +28,7 @@
                              title="{$text_resources.element_button_label_minimize_all}" />
                     </a>
                     <a href="#"
-                       onclick="deleteElement('{$id}','{$delete_element_form_id}', '{$text_resources.element_holder_delete_element_confirm_message}'); return false;"
+                       onclick="deleteElement('{$id}','{$delete_element_form_id}', '{$text_resources.element_holder_delete_element_confirm_message}', '{$identifier}', '{$text_resources.element_holder_delete_container_confirm_message}', '{$text_resources.element_holder_delete_container_confirm_delete_children}', '{$text_resources.element_holder_delete_container_confirm_keep_children}'); return false;"
                        title="{$text_resources.element_button_label_delete}">
                         <img src="/admin?file=/default/img/default_icons/delete_small.png"
                              alt="{$text_resources.element_button_label_delete}"

@@ -12,6 +12,8 @@
             <button type="button" class="confirm-dialog-btn confirm-dialog-btn-cancel" id="confirm-dialog-cancel">
                 Annuleren
             </button>
+            <button type="button" class="confirm-dialog-btn confirm-dialog-btn-secondary" id="confirm-dialog-secondary" style="display: none;">
+            </button>
             <button type="button" class="confirm-dialog-btn confirm-dialog-btn-confirm" id="confirm-dialog-confirm">
                 Bevestigen
             </button>

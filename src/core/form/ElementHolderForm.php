@@ -3,6 +3,7 @@
 namespace Pageflow\Core\core\form;
 
 use Pageflow\Core\core\model\ElementHolder;
+use const Pageflow\Core\ELEMENT_CONTAINER_ASSIGNMENTS_FORM_ID;
 
 class ElementHolderForm extends Form {
 
@@ -26,6 +27,27 @@ class ElementHolderForm extends Form {
                     break;
                 }
             }
+        }
+
+        $this->loadContainerAssignments();
+    }
+
+    public function loadContainerAssignments(): void {
+        $assignmentsJson = $this->getFieldValue(ELEMENT_CONTAINER_ASSIGNMENTS_FORM_ID);
+        $assignments = array();
+        if ($assignmentsJson) {
+            $decoded = json_decode($assignmentsJson, true);
+            if (is_array($decoded)) {
+                $assignments = $decoded;
+            }
+        }
+        foreach ($this->elementHolder->getElements() as $element) {
+            if (!array_key_exists($element->getId(), $assignments)) {
+                // Keep current DB-backed value when an element id is not present in posted assignments.
+                continue;
+            }
+            $containerId = $assignments[$element->getId()];
+            $element->setContainerId($containerId !== null && $containerId !== '' ? (int)$containerId : null);
         }
     }
 

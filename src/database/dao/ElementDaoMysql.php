@@ -10,7 +10,7 @@ use Pageflow\Core\database\MysqlConnector;
 class ElementDaoMysql implements ElementDao {
 
     private static string $myAllColumns = "e.id, e.follow_up, e.template_id, e.include_in_table_of_contents, t.classname, t.scope_id, t.identifier, 
-                                        t.domain_object, e.element_holder_id";
+                                        t.domain_object, e.element_holder_id, e.element_container_id";
     private static ?ElementDaoMysql $instance = null;
     private MysqlConnector $mysqlConnector;
 
@@ -53,6 +53,7 @@ class ElementDaoMysql implements ElementDao {
             $set .= ', template_id = NULL';
         }
         $set .= ', include_in_table_of_contents = ' . ($element->includeInTableOfContents() ? '1' : '0');
+        $set .= ', element_container_id = ' . (!is_null($element->getContainerId()) ? $element->getContainerId() : 'NULL');
         $query = "UPDATE elements SET " . $set . "    WHERE id = " . $element->getId();
         $this->mysqlConnector->executeQuery($query);
         $element->updateMetaData();
@@ -123,8 +124,9 @@ class ElementDaoMysql implements ElementDao {
     }
 
     public function insertElement(ElementType $elementType, Element $element): Element {
-        $query = "INSERT INTO elements(follow_up, type_id, element_holder_id) VALUES (" . $element->getOrderNr() . " 
-                      , " . $elementType->getId() . ", " . $element->getElementHolderId() . ")";
+        $containerId = !is_null($element->getContainerId()) ? $element->getContainerId() : 'NULL';
+        $query = "INSERT INTO elements(follow_up, type_id, element_holder_id, element_container_id) VALUES (" . $element->getOrderNr() . " 
+                      , " . $elementType->getId() . ", " . $element->getElementHolderId() . ", " . $containerId . ")";
         $this->mysqlConnector->executeQuery($query);
         $element->setId($this->mysqlConnector->getInsertId());
         $element->updateMetaData();

@@ -19,6 +19,7 @@ abstract class Element extends Presentable {
     private int $elementHolderId;
     private int $orderNr;
     private bool $includeInTableOfContents = false;
+    private ?int $containerId = null;
     private ElementMetadataDao $metadataDao;
 
     public function __construct(int $scopeId, ElementMetadataDao $metadataProvider) {
@@ -41,6 +42,7 @@ abstract class Element extends Presentable {
         $element->setTemplateId($record['template_id']);
         $element->setIncludeInTableOfContents($record['include_in_table_of_contents'] == 1);
         $element->setElementHolderId($record['element_holder_id']);
+        $element->setContainerId(isset($record['element_container_id']) ? (int)$record['element_container_id'] : null);
 
         $element->initializeMetaData();
         return $element;
@@ -80,6 +82,14 @@ abstract class Element extends Presentable {
 
     public function setElementHolderId(int $elementHolderId): void {
         $this->elementHolderId = $elementHolderId;
+    }
+
+    public function getContainerId(): ?int {
+        return $this->containerId;
+    }
+
+    public function setContainerId(?int $containerId): void {
+        $this->containerId = $containerId;
     }
 
     public function updateMetaData(): void {

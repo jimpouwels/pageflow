@@ -96,6 +96,10 @@ abstract class FrontendVisual {
         $currentGroupHtmlId = null;
 
         foreach ($elementHolder->getElements() as $element) {
+            if ($element->getContainerId() !== null) {
+                // rendered nested inside its ElementContainerElement instead
+                continue;
+            }
             $elementType = $this->elementDao->getElementTypeForElement($element->getId())->getIdentifier();
             
             if ($elementType == 'separator_element') {

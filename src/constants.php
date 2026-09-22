@@ -11,11 +11,9 @@ const EDIT_ELEMENT_HOLDER_ID = 'element_holder_id';
 const ACTION_FORM_ID = 'action';
 const DELETE_ELEMENT_FORM_ID = 'delete_element';
 const ELEMENT_HOLDER_FORM_ID = 'element_holder_form_id';
-
-// ELEMENT HOLDER TYPES
-const ELEMENT_HOLDER_PAGE = 'ELEMENT_HOLDER_PAGE';
-const ELEMENT_HOLDER_ARTICLE = 'ELEMENT_HOLDER_ARTICLE';
-const ELEMENT_HOLDER_BLOCK = 'ELEMENT_HOLDER_BLOCK';
+const ELEMENT_CONTAINER_ASSIGNMENTS_FORM_ID = 'element_container_assignments';
+const TARGET_CONTAINER_FORM_ID = 'target_container_id';
+const DELETE_CONTAINER_CHILDREN_FORM_ID = 'delete_container_children';
 
 // DEFINE SYSTEM VERSION
 const SYSTEM_VERSION = "0.0.7";

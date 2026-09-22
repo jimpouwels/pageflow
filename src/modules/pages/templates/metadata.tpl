@@ -3,6 +3,8 @@
 <input type="hidden" id="element_holder_version" name="element_holder_version" value="{$element_holder_version}" />
 <input type="hidden" id="{$delete_element_form_id}" name="{$delete_element_form_id}" value="" />
 <input type="hidden" id="draggable_order" name="draggable_order" value="" />
+<input type="hidden" id="element_container_assignments" name="element_container_assignments" value="" />
+<input type="hidden" id="delete_container_children" name="delete_container_children" value="" />
 <input type="hidden" id="{$action_form_id}" name="{$action_form_id}" value="" />
 <div class="admin_form_v2">
     {$page_name_field}

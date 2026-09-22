@@ -6,6 +6,7 @@ function showConfirm(message, options) {
         var title = opts.title || 'Bevestiging';
         var confirmText = opts.confirmText || 'Bevestigen';
         var cancelText = opts.cancelText || 'Annuleren';
+        var secondaryText = opts.secondaryText || null;
         var isDanger = opts.danger || false;
         
         // Set dialog content
@@ -13,6 +14,11 @@ function showConfirm(message, options) {
         $('#confirm-dialog-message').text(message);
         $('#confirm-dialog-confirm').text(confirmText);
         $('#confirm-dialog-cancel').text(cancelText);
+        if (secondaryText) {
+            $('#confirm-dialog-secondary').text(secondaryText).show();
+        } else {
+            $('#confirm-dialog-secondary').hide();
+        }
         
         // Add/remove danger class
         if (isDanger) {
@@ -21,28 +27,26 @@ function showConfirm(message, options) {
             $('#confirm-dialog-confirm').removeClass('danger');
         }
         
-        // Show dialog
-        $('#confirm-dialog').css({ display: 'flex', opacity: 0 }).animate({ opacity: 1 }, 150);
+        // Show dialog. Stop any in-progress fade animation first, since this same
+        // dialog element/queue may still be finishing a previous showConfirm() call.
+        $('#confirm-dialog').stop(true, true).css({ display: 'flex', opacity: 0 }).animate({ opacity: 1 }, 150);
         
         // Store handlers so we can remove them later
-        var confirmHandler = function() {
-            $('#confirm-dialog').animate({ opacity: 0 }, 150, function() { $(this).hide(); });
+        var close = function(result) {
+            $('#confirm-dialog').stop(true, true).animate({ opacity: 0 }, 150, function() { $(this).hide(); });
             $('#confirm-dialog-confirm').off('click', confirmHandler);
+            $('#confirm-dialog-secondary').off('click', secondaryHandler);
             $('#confirm-dialog-cancel').off('click', cancelHandler);
             $('.confirm-dialog-backdrop').off('click', cancelHandler);
-            resolve(true);
+            resolve(result);
         };
-        
-        var cancelHandler = function() {
-            $('#confirm-dialog').animate({ opacity: 0 }, 150, function() { $(this).hide(); });
-            $('#confirm-dialog-confirm').off('click', confirmHandler);
-            $('#confirm-dialog-cancel').off('click', cancelHandler);
-            $('.confirm-dialog-backdrop').off('click', cancelHandler);
-            resolve(false);
-        };
+        var confirmHandler = function() { close(true); };
+        var secondaryHandler = function() { close('secondary'); };
+        var cancelHandler = function() { close(false); };
         
         // Attach event listeners
         $('#confirm-dialog-confirm').on('click', confirmHandler);
+        $('#confirm-dialog-secondary').on('click', secondaryHandler);
         $('#confirm-dialog-cancel').on('click', cancelHandler);
         $('.confirm-dialog-backdrop').on('click', cancelHandler);
         
@@ -80,9 +84,20 @@ function addElement(elementTypeId, errorMessage) {
 // Global variable to store insert position
 var elementInsertPosition = null;
 
-// Shows the element selector modal at a specific position
+// Global variable to store the target container id (null means top level)
+var elementInsertTargetContainerId = null;
+
+// Shows the element selector modal at a specific position (top level)
 function showElementSelector(position) {
     elementInsertPosition = position;
+    elementInsertTargetContainerId = null;
+    $('#element-selector-modal').fadeIn(200);
+}
+
+// Shows the element selector modal to insert an element inside a given container
+function showElementSelectorForContainer(containerId, position) {
+    elementInsertPosition = position;
+    elementInsertTargetContainerId = containerId;
     $('#element-selector-modal').fadeIn(200);
 }
 
@@ -90,6 +105,7 @@ function showElementSelector(position) {
 function hideElementSelector() {
     $('#element-selector-modal').fadeOut(200);
     elementInsertPosition = null;
+    elementInsertTargetContainerId = null;
 }
 
 // Inserts element at the stored position
@@ -114,6 +130,19 @@ function insertElementAtPosition(elementTypeId) {
         }).appendTo('#element_holder_form_id');
     } else {
         $positionField.attr('value', elementInsertPosition);
+    }
+
+    // Set target container id, if inserting inside an element container
+    var $targetContainerField = $('#target_container_id');
+    if ($targetContainerField.length == 0) {
+        $('<input>').attr({
+            type: 'hidden',
+            id: 'target_container_id',
+            name: 'target_container_id',
+            value: elementInsertTargetContainerId || ''
+        }).appendTo('#element_holder_form_id');
+    } else {
+        $targetContainerField.attr('value', elementInsertTargetContainerId || '');
     }
     
     hideElementSelector();
@@ -141,7 +170,7 @@ function submitSelectionBackToOpener(backRef, backValue, backClickId) {
 }
 
 // handles the 'delete element' click
-function deleteElement(elementId, formFieldId, confirmMessage) {
+function deleteElement(elementId, formFieldId, confirmMessage, identifier, containerConfirmMessage, deleteChildrenText, keepChildrenText) {
     var $inputField = $('#' + formFieldId);
     if ($inputField.length == 0) {
         alert('Fout: Kan element niet verwijderen');
@@ -149,12 +178,36 @@ function deleteElement(elementId, formFieldId, confirmMessage) {
     } else {
         $inputField.attr('value', elementId);
     }
-    confirmDialog(confirmMessage).then(function(confirmed) {
-        if (confirmed) {
+    if (identifier === 'element_container_element') {
+        // Single 3-way choice: cancel, delete the container only (children become
+        // unparented), or delete the container together with its children.
+        // Previously this chained two separate confirm dialogs that shared the same
+        // DOM element/animation queue, which could race and require deleting twice.
+        showConfirm(containerConfirmMessage, {
+            confirmText: deleteChildrenText,
+            secondaryText: keepChildrenText,
+            cancelText: 'Annuleren',
+            danger: true
+        }).then(function(result) {
+            if (result === false) {
+                return;
+            }
+            var $deleteChildrenField = $('#delete_container_children');
+            if ($deleteChildrenField.length > 0) {
+                $deleteChildrenField.attr('value', result === true ? '1' : '0');
+            }
             $('#action').attr('value', 'update_element_holder');
             $('#element_holder_form_id').trigger('submit');
-        }
-    });
+        });
+    } else {
+        confirmDialog(confirmMessage).then(function(confirmed) {
+            if (!confirmed) {
+                return;
+            }
+            $('#action').attr('value', 'update_element_holder');
+            $('#element_holder_form_id').trigger('submit');
+        });
+    }
 }
 
 // elements visibility
@@ -237,9 +290,12 @@ function findElementHeader(elementNode) {
 }
 
 // initializes sortable elements using native HTML5 drag-and-drop
+// Supports multiple independent lists (the top-level element holder list plus any
+// nested element-container child lists), including dragging an element from one
+// list into another (e.g. into / out of an element container).
 $(document).ready(function () {
-    var $container = $(".draggable_items");
-    if (!$container.length) return;
+    var $allContainers = $(".draggable_items");
+    if (!$allContainers.length) return;
 
     var cancelSelectors = '.rich-text-content, .rich-text-toolbar, input, textarea, select, button, a';
     var dragSrc = null;
@@ -248,7 +304,7 @@ $(document).ready(function () {
     var lastBefore = null;
 
     var buttonHtml = '<div class="element-insert-button" data-insert-position="POS">' +
-        '<button type="button" class="insert-btn" onclick="showElementSelector(POS); return false;" title="Element invoegen">' +
+        '<button type="button" class="insert-btn" onclick="ONCLICK; return false;" title="Element invoegen">' +
         '<svg width="16" height="16" viewBox="0 0 16 16" fill="none">' +
         '<path d="M8 3V13M3 8H13" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>' +
         '</svg></button>' +
@@ -258,30 +314,90 @@ $(document).ready(function () {
         '<path d="M6 2L6 10M6 10L3 7M6 10L9 7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>' +
         '</svg></div></div></div>';
 
-    function rebuildInsertButtons() {
-        var $c = $('#element_container');
-        $('.element-insert-button').remove();
-        if (!$c.length) return;
-        $c.prepend(buttonHtml.replace(/POS/g, '0'));
+    // Only the top-level element holder list and nested element-container child
+    // lists get insert buttons; plain lists (e.g. webform fields) are left alone.
+    function isElementList($list) {
+        return $list.attr('id') === 'element_container' || $list.hasClass('element_container_child_list');
+    }
+
+    function buttonHtmlFor($list, position) {
+        var containerId = $list.data('container-id');
+        var onclick = containerId ? "showElementSelectorForContainer('" + containerId + "'," + position + ")" : 'showElementSelector(' + position + ')';
+        return buttonHtml.replace(/POS/g, position).replace('ONCLICK', onclick);
+    }
+
+    function rebuildInsertButtonsFor($list) {
+        if (!isElementList($list)) return;
+        // Keep the empty/centered-plus styling in sync with whether the list
+        // actually still has elements (e.g. after dragging the first element
+        // into, or the last element out of, an element container).
+        $list.toggleClass('empty-container', $list.children('.collapsable_root_wrapper').length === 0);
+        $list.children('.element-insert-button').remove();
+        $list.prepend(buttonHtmlFor($list, 0));
         var idx = 0;
-        $c.children('.collapsable_root_wrapper').each(function () {
+        $list.children('.collapsable_root_wrapper').each(function () {
             idx++;
-            $(this).after(buttonHtml.replace(/POS/g, idx));
+            $(this).after(buttonHtmlFor($list, idx));
         });
+    }
+
+    function rebuildInsertButtons() {
+        $allContainers.each(function () {
+            rebuildInsertButtonsFor($(this));
+        });
+    }
+
+    // Rebuilds the container-assignment map (element id -> containing element id)
+    // from the current DOM structure of the nested element-container child lists.
+    function updateContainerAssignments() {
+        var $assignmentsField = $('#element_container_assignments');
+        if (!$assignmentsField.length) return;
+        var assignments = {};
+
+        // Explicitly mark top-level elements as null so moving an element out of
+        // a container is persisted and not inferred as "missing".
+        $('#element_container').children('.collapsable_root_wrapper').each(function () {
+            var topLevelId = $(this).find('.draggable_id_holder').first().text();
+            if (topLevelId) assignments[topLevelId] = null;
+        });
+
+        $('.element_container_child_list').each(function () {
+            var containerId = $(this).data('container-id');
+            $(this).children('.collapsable_root_wrapper').each(function () {
+                var childId = $(this).find('.draggable_id_holder').first().text();
+                if (childId) assignments[childId] = containerId;
+            });
+        });
+        $assignmentsField.attr('value', JSON.stringify(assignments));
     }
 
     function updateOrder() {
         var idString = '';
-        $container.find('.draggable_id_holder').each(function () {
-            if (idString !== '') idString += ',';
-            idString += $(this).text();
+        $allContainers.each(function () {
+            $(this).children('.collapsable_root_wrapper').each(function () {
+                var id = $(this).find('.draggable_id_holder').first().text();
+                if (!id) return;
+                if (idString !== '') idString += ',';
+                idString += id;
+            });
         });
         var $order_field = $('#draggable_order');
         if ($order_field.length > 0) $order_field.attr('value', idString);
+        updateContainerAssignments();
         rebuildInsertButtons();
     }
 
-    $container.children('.collapsable_root_wrapper').each(function () {
+    // Initialize hidden fields for first save, even before a drag action happens.
+    updateOrder();
+
+    // Finds the nearest non-insert-button sibling after a node within its parent list.
+    function nextItem(node) {
+        var s = node.nextElementSibling;
+        while (s && s.classList.contains('element-insert-button')) s = s.nextElementSibling;
+        return s;
+    }
+
+    $allContainers.children('.collapsable_root_wrapper').each(function () {
         var el = this;
         el.draggable = true;
 
@@ -289,6 +405,10 @@ $(document).ready(function () {
         var mousedownX = 0;
         var mousedownY = 0;
         el.addEventListener('mousedown', function (e) {
+            // Stop here so a mousedown inside a nested element (e.g. within an
+            // element container) doesn't also get recorded by the container's
+            // own (ancestor) mousedown listener.
+            e.stopPropagation();
             mousedownTarget = e.target;
             mousedownX = e.clientX;
             mousedownY = e.clientY;
@@ -301,6 +421,9 @@ $(document).ready(function () {
                 e.preventDefault();
                 return;
             }
+            // Stop bubbling so an ancestor element (e.g. the element container
+            // this element lives in) doesn't also treat this as its own drag start.
+            e.stopPropagation();
             dragSrc = el;
             e.dataTransfer.effectAllowed = 'move';
             e.dataTransfer.setData('text/plain', '');
@@ -325,28 +448,29 @@ $(document).ready(function () {
             placeholder.className = 'element-drag-placeholder';
             placeholder.style.height = el.offsetHeight + 'px';
 
+            var $ownList = $(el).closest('.draggable_items');
             requestAnimationFrame(function () {
-                $container[0].insertBefore(placeholder, el);
+                $ownList[0].insertBefore(placeholder, el);
                 $(el).hide();
-                $container.addClass('is-dragging');
+                $allContainers.addClass('is-dragging');
             });
         });
 
         el.addEventListener('dragover', function (e) {
             if (!dragSrc || !placeholder) return;
+            // Elements can only be dropped into element lists (top-level or a
+            // container's child list), never into unrelated draggable lists (e.g. webforms).
+            var $targetList = $(el).closest('.draggable_items');
+            if (!isElementList($targetList)) return;
             e.preventDefault();
+            // Stop bubbling so an ancestor element's own dragover handler (e.g. the
+            // container this element lives in) doesn't immediately reposition the
+            // placeholder back out to its own (outer) list.
+            e.stopPropagation();
             e.dataTransfer.dropEffect = 'move';
 
             var rect = el.getBoundingClientRect();
             var before = e.clientY < rect.top + rect.height / 2;
-
-            // Skip over hidden insert buttons when resolving siblings so there
-            // is only one insertion point between any two elements.
-            function nextItem(node) {
-                var s = node.nextElementSibling;
-                while (s && s.classList.contains('element-insert-button')) s = s.nextElementSibling;
-                return s;
-            }
 
             if (before && nextItem(placeholder) === el) return;
             if (!before && nextItem(el) === placeholder) return;
@@ -356,10 +480,11 @@ $(document).ready(function () {
 
             // Insert after el: find the first non-insert-button sibling after el
             var insertRef = before ? el : nextItem(el);
-            $container[0].insertBefore(placeholder, insertRef || null);
+            $targetList[0].insertBefore(placeholder, insertRef || null);
         });
 
-        el.addEventListener('dragend', function () {
+        el.addEventListener('dragend', function (e) {
+            e.stopPropagation();
             if (placeholder && placeholder.parentNode) {
                 placeholder.parentNode.insertBefore(el, placeholder);
                 placeholder.parentNode.removeChild(placeholder);
@@ -369,14 +494,38 @@ $(document).ready(function () {
             dragSrc = null;
             lastTarget = null;
             lastBefore = null;
-            $container.removeClass('is-dragging');
+            $allContainers.removeClass('is-dragging');
             updateOrder();
         });
     });
 
-    $container[0].addEventListener('dragover', function (e) {
-        if (dragSrc) e.preventDefault();
+    $allContainers.each(function () {
+        var list = this;
+        list.addEventListener('dragover', function (e) {
+            if (!dragSrc) return;
+            var $list = $(list);
+            if (!isElementList($list)) return;
+            e.preventDefault();
+            // Stop bubbling so an ancestor list (e.g. the top-level list, when this
+            // is a nested container child list) doesn't also reposition the placeholder.
+            e.stopPropagation();
+            // Allow drops anywhere inside the list (also when hovering the plus button).
+            if (!list.contains(e.target)) return;
+            if (placeholder && placeholder.parentNode !== list) {
+                list.appendChild(placeholder);
+            } else if (placeholder && !placeholder.parentNode) {
+                list.appendChild(placeholder);
+            }
+        });
     });
+
+    $allContainers.each(function () {
+        var list = this;
+        list.addEventListener('drop', function () {
+            updateOrder();
+        });
+    });
+
 });
 
 // Auto-scroll the page while dragging near the top or bottom edge

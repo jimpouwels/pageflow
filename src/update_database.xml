@@ -351,6 +351,11 @@
             <query>ALTER TABLE list_element_items ADD CONSTRAINT lei_functional_image FOREIGN KEY (functional_image_id) REFERENCES functional_images (id) ON DELETE SET NULL ON UPDATE RESTRICT</query>
             <query>ALTER TABLE text_elements_metadata CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci</query>
             <query>ALTER TABLE template_files ADD COLUMN code LONGTEXT NOT NULL</query>
+            <query>ALTER TABLE elements ADD COLUMN element_container_id int(10) unsigned DEFAULT NULL</query>
+            <query>ALTER TABLE elements ADD CONSTRAINT element_to_container FOREIGN KEY element_to_container (element_container_id) REFERENCES elements (id) ON DELETE SET NULL ON UPDATE CASCADE</query>
+            <query>CREATE TABLE element_container_elements_metadata (id int(10) unsigned NOT NULL AUTO_INCREMENT, title varchar(255) DEFAULT NULL, element_id int(10) unsigned NOT NULL, PRIMARY KEY (id), KEY element_container_elements_metadata_to_element (element_id), CONSTRAINT element_container_elements_metadata_to_element FOREIGN KEY (element_id) REFERENCES elements (id) ON DELETE CASCADE ON UPDATE CASCADE)</query>
+            <query>INSERT INTO scopes (identifier) VALUES ('element_container_element')</query>
+            <query>INSERT INTO element_types (classname, domain_object, scope_id, identifier, system_default) VALUES ('ElementContainerElement', 'ElementContainerElement.php', (SELECT id FROM scopes WHERE identifier = 'element_container_element'), 'element_container_element', 1)</query>
         </queries>
     </version>
 </versions>

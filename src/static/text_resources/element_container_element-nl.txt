@@ -1,0 +1,5 @@
+#GENERAL
+element_container_element_label: Elementcontainer
+element_container_element_scope_label: Elementcontainer Element
+element_container_element_editor_title: Titel
+element_container_element_editor_add_child: Element toevoegen

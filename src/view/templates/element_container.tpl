@@ -18,7 +18,7 @@
 </div>
 
 {if isset($elements)}
-    <div id="element_container" class="draggable_items">
+    <div id="element_container" class="draggable_items" data-container-assignments="{$container_assignments_json|escape:'html'}">
         {* Insert button at the top *}
         <div class="element-insert-button" data-insert-position="0">
             <button type="button" class="insert-btn" onclick="showElementSelector(0); return false;" title="Element invoegen">
@@ -58,7 +58,7 @@
         {/foreach}
     </div>
 {else}
-    <div id="element_container" class="draggable_items empty-container">
+    <div id="element_container" class="draggable_items empty-container" data-container-assignments="{$container_assignments_json|escape:'html'}">
         {* Insert button for empty container *}
         <div class="element-insert-button" data-insert-position="0">
             <button type="button" class="insert-btn" onclick="showElementSelector(0); return false;" title="Element invoegen">

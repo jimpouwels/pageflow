@@ -84,6 +84,9 @@ element_button_label_delete: Verwijder
 element_button_label_minimize_all: Minimaliseer alle
 element_button_label_minimize: Minimaliseer
 element_holder_delete_element_confirm_message: Weet u zeker dat u dit element wilt verwijderen?
+element_holder_delete_container_confirm_message: Deze elementcontainer bevat elementen. Wilt u deze elementen ook verwijderen, of behouden?
+element_holder_delete_container_confirm_delete_children: Elementen verwijderen
+element_holder_delete_container_confirm_keep_children: Elementen behouden
 
 # BLOCK SELECTOR
 available_blocks: Beschikbare blokken

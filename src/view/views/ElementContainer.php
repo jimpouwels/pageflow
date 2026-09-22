@@ -23,18 +23,30 @@ class ElementContainer extends Panel {
     }
 
     public function loadPanelContent(TemplateData $data): void {
-        if (count($this->elements) > 0) {
-            $data->assign("elements", $this->renderElements());
+        $topLevelElements = array_filter($this->elements, fn($element) => $element->getContainerId() === null);
+        if (count($topLevelElements) > 0) {
+            $data->assign("elements", $this->renderElements($topLevelElements));
         }
         $data->assign("element_types", $this->getElementTypes());
+        $data->assign("container_assignments_json", $this->getContainerAssignmentsJson());
     }
 
-    private function renderElements(): array {
-        $elements = array();
-        foreach ($this->elements as $element) {
-            $elements[] = $element->getBackendVisual()->render();
+    private function renderElements(array $elements): array {
+        $rendered = array();
+        foreach ($elements as $element) {
+            $rendered[] = $element->getBackendVisual()->render();
         }
-        return $elements;
+        return $rendered;
+    }
+
+    private function getContainerAssignmentsJson(): string {
+        $assignments = array();
+        foreach ($this->elements as $element) {
+            if ($element->getContainerId() !== null) {
+                $assignments[$element->getId()] = $element->getContainerId();
+            }
+        }
+        return json_encode($assignments);
     }
 
     private function getElementTypes(): array {
