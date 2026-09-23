@@ -152,23 +152,6 @@ function insertElementAtPosition(elementTypeId) {
 $(document).ready(function() {
 });
 
-// Saves the selected element holder back to the link in the parent window
-function submitSelectionBackToOpener(backRef, backValue, backClickId) {
-    var $backField = window.opener.$('#' + backRef);
-    if ($backField.length > 0) {
-        $backField.attr('value', backValue);
-        // Delay the click and window close to ensure value is set
-        setTimeout(function() {
-            window.opener.$('#' + backClickId).trigger('click');
-            setTimeout(function() {
-                window.close();
-            }, 200);
-        }, 50);
-    } else {
-        alert('Fout: Kan niet opgeslagen worden, waarschijnlijk is het hoofdscherm gesloten');
-    }
-}
-
 // handles the 'delete element' click
 function deleteElement(elementId, formFieldId, confirmMessage, identifier, containerConfirmMessage, deleteChildrenText, keepChildrenText) {
     var $inputField = $('#' + formFieldId);
