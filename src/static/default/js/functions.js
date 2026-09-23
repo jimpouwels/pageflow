@@ -618,19 +618,6 @@ function putLink(linkId) {
     }
 }
 
-// deletes the selected link target for a link
-function deleteLink(linkId) {
-    confirmDialog("Weet u zeker dat u dit linkdoel wilt verwijderen?").then(function(confirmed) {
-        if (confirmed) {
-            $('#delete_link_target').attr('value', linkId);
-            $('#action').attr('value', 'update_element_holder');
-            var $editorForm = $('#element_holder_form_id');
-            $editorForm.trigger('submit');
-        }
-    });
-    return false;
-}
-
 // horizontal dropdown menu
 $(document).ready(function () {
     $('.module-group').on('mouseover', function () {
