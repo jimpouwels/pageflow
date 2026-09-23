@@ -282,11 +282,11 @@ function getAllElements() {
 }
 
 function getElementIdFromElementNode(elementNode) {
-    return elementNode.find('.collapsable_id_holder').text()
+    return elementNode.children('.collapsable_id_holder').text()
 }
 
 function findElementHeader(elementNode) {
-    return elementNode.find('.collapsable_header');
+    return elementNode.children('.draggable_wrapper').children('.collapsable_header');
 }
 
 // initializes sortable elements using native HTML5 drag-and-drop
