@@ -17,21 +17,21 @@
 }
 
 /* Template files list uses generic content_left_column styling */
-.template_files_list_panel {
+.template_list_panel {
     width: 355px;
     float: left;
 }
 
-.template_file_editor_panel {
+.template_editor_panel {
     margin: auto;
     width: 1050px;
 }
 
-.template_file_editor_panel .admin_label_wrapper {
+.template_editor_panel .admin_label_wrapper {
     width: 30%;
 }
 
-.template_file_editor_panel .admin_field {
+.template_editor_panel .admin_field {
     width: 250px;
 }
 

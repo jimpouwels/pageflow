@@ -6,12 +6,12 @@ use Pageflow\Core\view\TemplateData;
 
 abstract class Panel extends Visual {
 
-    private string $titleResrouceIdentifier;
+    private string $titleResourceIdentifier;
     private string $class;
 
-    public function __construct(string $titleResrouceIdentifier, string $class = "") {
+    public function __construct(string $titleResourceIdentifier, string $class = "") {
         parent::__construct();
-        $this->titleResrouceIdentifier = $titleResrouceIdentifier;
+        $this->titleResourceIdentifier = $titleResourceIdentifier;
         $this->class = $class;
     }
 
@@ -28,7 +28,7 @@ abstract class Panel extends Visual {
         $this->loadPanelContent($panelContentTemplateData);
 
         $this->assign('content', $this->fetch($this->getPanelContentTemplate(), $panelContentTemplateData));
-        $this->assign('title_resource_identifier', $this->titleResrouceIdentifier);
+        $this->assign('title_resource_identifier', $this->titleResourceIdentifier);
         $this->assign('class', $this->class);
     }
 

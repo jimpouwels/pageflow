@@ -1,6 +1,6 @@
 <?php
 
-namespace Pageflow\Core\modules\templates\visuals\template_editor;
+namespace Pageflow\Core\modules\templates\visuals\template_variants;
 
 use Pageflow\Core\database\dao\ScopeDao;
 use Pageflow\Core\database\dao\ScopeDaoMysql;
@@ -20,7 +20,7 @@ class ScopeSelector extends Panel {
     }
 
     public function getPanelContentTemplate(): string {
-        return "templates/templates/scope_selector.tpl";
+        return "templates/templates/template_variants/scope_selector.tpl";
     }
 
     public function loadPanelContent(TemplateData $data): void {

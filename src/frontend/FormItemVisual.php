@@ -13,9 +13,9 @@ use const Pageflow\CMS_ROOT;
 abstract class FormItemVisual extends FrontendVisual {
 
     private WebformItem $webformItem;
-    private WebForm $webform;
+    private Webform $webform;
 
-    public function __construct(Page $page, ?Article $article, WebForm $webform, WebformItem $webformItem) {
+    public function __construct(Page $page, ?Article $article, Webform $webform, WebformItem $webformItem) {
         parent::__construct($page, $article);
         $this->webform = $webform;
         $this->webformItem = $webformItem;
@@ -35,11 +35,11 @@ abstract class FormItemVisual extends FrontendVisual {
         $this->assign('form_item_html', $this->fetch($this->getFormItemTemplateFilename()));
     }
 
-    protected function getFormItem(): WebFormItem {
+    protected function getFormItem(): WebformItem {
         return $this->webformItem;
     }
 
-    protected function getWebform(): WebForm {
+    protected function getWebform(): Webform {
         return $this->webform;
     }
 

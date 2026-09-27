@@ -2,29 +2,24 @@
 
 namespace Pageflow\Core\frontend;
 
-use Pageflow\Core\database\dao\TemplateDao;
-use Pageflow\Core\database\dao\TemplateDaoMysql;
 use Pageflow\Core\frontend\handlers\FormStatus;
 use Pageflow\Core\modules\articles\model\Article;
 use Pageflow\Core\modules\pages\model\Page;
 use Pageflow\Core\modules\templates\model\Presentable;
 use Pageflow\Core\modules\webforms\model\Webform;
 use Pageflow\Core\modules\webforms\WebformItemFactory;
-use const Pageflow\core\FRONTEND_TEMPLATE_DIR;
 use const Pageflow\CMS_ROOT;
 
 class FormFrontendVisual extends FrontendVisual {
 
     private WebformItemFactory $webformItemFactory;
 
-    private WebForm $webform;
-    private TemplateDao $templateDao;
+    private Webform $webform;
 
-    public function __construct(Page $page, ?Article $article, WebForm $webform) {
+    public function __construct(Page $page, ?Article $article, Webform $webform) {
         parent::__construct($page, $article);
         $this->webform = $webform;
         $this->webformItemFactory = WebformItemFactory::getInstance();
-        $this->templateDao = TemplateDaoMysql::getInstance();
     }
 
     public function getTemplateFilename(): string {
@@ -50,7 +45,7 @@ class FormFrontendVisual extends FrontendVisual {
             $webformChildData->assign('is_submitted', true);
             $webformChildData->assign('has_captcha_error', FormStatus::getError($this->webform->getId(), "captcha"));
         }
-        $this->assign('form_html', $this->getTemplateEngine()->fetch(FRONTEND_TEMPLATE_DIR . "/" . $this->templateDao->getTemplateFile($this->webform->getTemplate()->getTemplateFileId())->getFileName(), $webformChildData));
+        $this->assign('form_html', $this->getTemplateEngine()->fetch($this->getFrontendTemplateDir() . "/" . $this->getTemplateService()->getTemplateForPresentable($this->webform)->getFileName(), $webformChildData));
         FormStatus::clearErrors($this->webform->getId());
     }
 
@@ -58,14 +53,14 @@ class FormFrontendVisual extends FrontendVisual {
         return $this->webform;
     }
 
-    private function renderWebForm(WebForm $webform): array {
+    private function renderWebForm(Webform $webform): array {
         $webformData = array();
         $webformData['title'] = $webform->getTitle();
         $webformData['fields'] = $this->renderFields($webform);
         return $webformData;
     }
 
-    private function renderFields(WebForm $webform): array {
+    private function renderFields(Webform $webform): array {
         $fields = array();
         foreach ($webform->getFormFields() as $formField) {
             $field = $this->webformItemFactory->getFrontendVisualFor($webform, $formField, $this->getPage(), $this->getArticle());

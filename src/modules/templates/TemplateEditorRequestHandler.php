@@ -5,21 +5,21 @@ namespace Pageflow\Core\modules\templates;
 use Pageflow\Core\core\form\FormException;
 use Pageflow\Core\database\dao\ScopeDao;
 use Pageflow\Core\database\dao\ScopeDaoMysql;
-use Pageflow\Core\database\dao\TemplateDao;
-use Pageflow\Core\database\dao\TemplateDaoMysql;
+use Pageflow\Core\modules\templates\dao\TemplateDao;
+use Pageflow\Core\modules\templates\dao\TemplateDaoMysql;
 use Pageflow\Core\modules\templates\model\Scope;
-use Pageflow\Core\modules\templates\model\Template;
+use Pageflow\Core\modules\templates\model\TemplateVariant;
 use Pageflow\Core\request_handlers\HttpRequestHandler;
 
 class TemplateEditorRequestHandler extends HttpRequestHandler {
 
-    private static string $TEMPLATE_ID_GET = "template";
+    private static string $TEMPLATE_VARIANT_ID_GET = "template_variant";
     private static string $SCOPE_IDENTIFIER_GET = "scope";
-    private static string $TEMPLATE_ID_POST = "template_id";
+    private static string $TEMPLATE_VARIANT_ID_POST = "template_variant_id";
 
     private TemplateDao $templateDao;
     private ScopeDao $scopeDao;
-    private ?Template $currentTemplate = null;
+    private ?TemplateVariant $currentTemplateVariant = null;
     private ?Scope $currentScope = null;
 
     public function __construct() {
@@ -28,75 +28,89 @@ class TemplateEditorRequestHandler extends HttpRequestHandler {
     }
 
     public function handleGet(): void {
-        if ($this->isCurrentTemplateShown()) {
-            $this->currentTemplate = $this->getTemplateFromGetRequest();
+        if ($this->isCurrentTemplateVariantShown()) {
+            $this->currentTemplateVariant = $this->getTemplateVariantFromGetRequest();
         }
         $this->currentScope = $this->resolveScope();
     }
 
     public function handlePost(): void {
-        $this->currentTemplate = $this->getTemplateFromPostRequest();
+        $this->currentTemplateVariant = $this->getTemplateFromPostRequest();
         $this->currentScope = $this->resolveScope();
         if ($this->isUpdateAction()) {
-            $this->updateTemplate();
+            $this->updateTemplateVariant();
         } else if ($this->isAddTemplateAction()) {
-            $this->addTemplate();
+            $this->addTemplateVariant();
         } else if ($this->isDeleteAction()) {
-            $this->deleteTemplates();
+            $this->deleteTemplateVariants();
         }
     }
 
-    public function getCurrentTemplate(): ?Template {
-        return $this->currentTemplate;
+    public function getCurrentTemplateVariant(): ?TemplateVariant {
+        return $this->currentTemplateVariant;
     }
 
     public function getCurrentScope(): ?Scope {
         return $this->currentScope;
     }
 
-    private function addTemplate(): void {
-        $newTemplate = $this->templateDao->createTemplate();
+    private function addTemplateVariant(): void {
+        $newTemplate = $this->templateDao->createTemplateVariant();
         $this->sendSuccessMessage("Template succesvol aangemaakt");
         $this->redirectTo($this->getBackendBaseUrl() . "&template=" . $newTemplate->getId());
     }
 
-    private function deleteTemplates(): void {
-        foreach ($this->templateDao->getTemplates() as $template) {
-            if (isset($_POST["template_" . $template->getId() . "_delete"]))
-                $this->templateDao->deleteTemplate($template);
+    private function deleteTemplateVariants(): void {
+        $deletedAny = false;
+        foreach ($this->templateDao->getTemplateVariants() as $templateVariant) {
+            if (isset($_POST["template_variant_" . $templateVariant->getId() . "_delete"])) {
+                $this->templateDao->deleteTemplateVariant($templateVariant);
+                $deletedAny = true;
+            }
+        }
+        if (!$deletedAny && !is_null($this->currentTemplateVariant)) {
+            $scope = $this->currentScope;
+            $this->templateDao->deleteTemplateVariant($this->currentTemplateVariant);
+            $this->currentTemplateVariant = null;
+            $this->sendSuccessMessage("Template(s) succesvol verwijderd");
+            $redirectUrl = $this->getBackendBaseUrl();
+            if (!is_null($scope)) {
+                $redirectUrl .= "&scope=" . $scope->getIdentifier();
+            }
+            $this->redirectTo($redirectUrl);
         }
         $this->sendSuccessMessage("Template(s) succesvol verwijderd");
     }
 
-    private function updateTemplate(): void {
-        $template_form = new TemplateEditorForm($this->currentTemplate);
+    private function updateTemplateVariant(): void {
+        $templateVariantForm = new TemplateVariantEditorForm($this->currentTemplateVariant);
         try {
-            $template_form->loadFields();
-            $this->templateDao->updateTemplate($this->currentTemplate);
-            $this->sendSuccessMessage("Template succesvol opgeslagen");
+            $templateVariantForm->loadFields();
+            $this->templateDao->updateTemplateVariant($this->currentTemplateVariant);
+            $this->sendSuccessMessage("Template variant succesvol opgeslagen");
         } catch (FormException $e) {
-            $this->sendErrorMessage("Template niet opgeslagen, verwerk de fouten");
+            $this->sendErrorMessage("Template variant niet opgeslagen, verwerk de fouten");
         }
     }
 
     private function resolveScope(): ?Scope {
         $scope = $this->getScopeFromGetRequest();
-        if (is_null($scope) && !is_null($this->currentTemplate)) {
-            $scope = $this->scopeDao->getScope($this->currentTemplate->getScopeId());
+        if (is_null($scope) && !is_null($this->currentTemplateVariant)) {
+            $scope = $this->scopeDao->getScope($this->currentTemplateVariant->getScopeId());
         }
         return $scope;
     }
 
-    private function getTemplateFromPostRequest(): ?Template {
-        $template = null;
-        if (isset($_POST[self::$TEMPLATE_ID_POST])) {
-            $template = $this->templateDao->getTemplate(intval($_POST[self::$TEMPLATE_ID_POST]));
+    private function getTemplateFromPostRequest(): ?TemplateVariant {
+        $templateVariant = null;
+        if (isset($_POST[self::$TEMPLATE_VARIANT_ID_POST])) {
+            $templateVariant = $this->templateDao->getTemplateVariant(intval($_POST[self::$TEMPLATE_VARIANT_ID_POST]));
         }
-        return $template;
+        return $templateVariant;
     }
 
-    private function getTemplateFromGetRequest(): Template {
-        return $this->templateDao->getTemplate($_GET[self::$TEMPLATE_ID_GET]);
+    private function getTemplateVariantFromGetRequest(): TemplateVariant {
+        return $this->templateDao->getTemplateVariant($_GET[self::$TEMPLATE_VARIANT_ID_GET]);
     }
 
     private function getScopeFromGetRequest(): ?Scope {
@@ -107,20 +121,20 @@ class TemplateEditorRequestHandler extends HttpRequestHandler {
         return null;
     }
 
-    private function isCurrentTemplateShown(): bool {
-        return isset($_GET[self::$TEMPLATE_ID_GET]);
+    private function isCurrentTemplateVariantShown(): bool {
+        return isset($_GET[self::$TEMPLATE_VARIANT_ID_GET]);
     }
 
     private function isUpdateAction(): bool {
-        return isset($_POST["action"]) && $_POST["action"] == "update_template";
+        return isset($_POST["action"]) && $_POST["action"] == "update_template_variant";
     }
 
     private function isAddTemplateAction(): bool {
-        return isset($_POST["action"]) && $_POST["action"] == "add_template";
+        return isset($_POST["action"]) && $_POST["action"] == "add_template_variant";
     }
 
     private function isDeleteAction(): bool {
-        return isset($_POST["action"]) && $_POST["action"] == "delete_templates";
+        return isset($_POST["action"]) && $_POST["action"] == "delete_template_variants";
     }
 
 }

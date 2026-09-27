@@ -21,7 +21,7 @@ class ElementContainerElementFrontendVisual extends ElementFrontendVisual {
     private function renderChildren(): array {
         $rendered = array();
         foreach ($this->getElement()->getChildElements() as $childElement) {
-            if ($childElement->getTemplate()) {
+            if ($this->getTemplateService()->getTemplateVariant($childElement->getTemplateId())) {
                 $childVisual = $childElement->getFrontendVisual($this->getPage(), $this->getArticle(), $this->getBlock());
                 $rendered[] = $childVisual->render();
             }

@@ -55,14 +55,18 @@ abstract class FrontendVisual {
         $presentable = $this->getPresentable();
         $templateVars = array();
 
-        if ($presentable && $presentable->getTemplate()) {
-            $templateVarDefs = $this->templateService->getTemplateVarDefsByTemplate($presentable->getTemplate());
-            foreach ($presentable->getTemplate()->getTemplateVars() as $templateVar) {
-                $varValue = $templateVar->getValue() ?: $this->getDefaultValueFor($templateVar, $templateVarDefs);
-                if (is_numeric($varValue)) {
-                    $varValue = intval($varValue);
+        if ($presentable) {
+            $presentableTemplateVariant = $this->templateService->getTemplateVariant($presentable->getTemplateId());
+            if ($presentableTemplateVariant) {
+                $templateVars = $presentableTemplateVariant->getTemplateVars();
+                $templateVarDefs = $this->templateService->getTemplateVarDefsByTemplate($presentableTemplateVariant);
+                foreach ($templateVars as $templateVar) {
+                    $varValue = $templateVar->getValue() ?: $this->getDefaultValueFor($templateVar, $templateVarDefs);
+                    if (is_numeric($varValue)) {
+                        $varValue = intval($varValue);
+                    }
+                    $templateVars[$templateVar->getName()] = $varValue;
                 }
-                $templateVars[$templateVar->getName()] = $varValue;
             }
         }
         $this->assign("var", $templateVars);
@@ -79,6 +83,18 @@ abstract class FrontendVisual {
     abstract function getPresentable(): ?Presentable;
 
     abstract function getTemplateFilename(): string;
+
+    protected function getTemplateFilenameForPresentable(): string {
+        return $this->getFrontendTemplateDir() . "/" . $this->getTemplateService()->getTemplateForPresentable($this->getPresentable())->getFileName();
+    }
+
+    protected function getFrontendTemplateDir(): string {
+        return FRONTEND_TEMPLATE_DIR;
+    }
+
+    protected function getTemplateService(): TemplateService {
+        return $this->templateService;
+    }
 
     protected function getTemplateEngine(): TemplateEngine {
         return $this->templateEngine;
@@ -104,7 +120,7 @@ abstract class FrontendVisual {
             
             if ($elementType == 'separator_element') {
                 // Close current group by appending previous separator's closing to last element
-                if ($previousSeparator && $previousSeparator->getTemplate() && count($elementGroup) > 0) {
+                if ($previousSeparator && $this->getTemplateService()->getTemplateVariant($previousSeparator->getTemplateId()) && count($elementGroup) > 0) {
                     $closePrevious = array();
                     $closePrevious['is_closing'] = true;
                     $previousVisual = $previousSeparator->getFrontendVisual($this->getPage(), $this->getArticle(), $this->getBlock());
@@ -124,7 +140,7 @@ abstract class FrontendVisual {
                 }
                 
                 // Store the new separator to open the next group
-                if ($element->getTemplate()) {
+                if ($this->getTemplateService()->getTemplateVariant($element->getTemplateId())) {
                     $elementData = array();
                     $elementData["is_closing"] = false;
                     $elementVisual = $element->getFrontendVisual($this->getPage(), $this->getArticle(), $this->getBlock());
@@ -139,9 +155,8 @@ abstract class FrontendVisual {
             // Regular element
             $elementData = array();
             $elementData["type"] = $elementType;
-            $elementData["template"] = $element->getTemplate()?->getName();
-            
-            if ($element->getTemplate()) {
+            // $elementData["template"] = $this->getTemplateService()->getTemplateV($element->getTemplateVariant())->getFileName();
+            if ($this->getTemplateService()->getTemplateVariant($element->getTemplateId())) {
                 $elementVisual = $element->getFrontendVisual($this->getPage(), $this->getArticle(), $this->getBlock());
                 $elementData["to_string"] = $elementVisual->render($elementData);
                 
@@ -159,7 +174,7 @@ abstract class FrontendVisual {
         
         // Append closing separator to LAST element in final group
         if (count($elementGroup) > 0) {
-            if ($previousSeparator && $previousSeparator->getTemplate()) {
+            if ($previousSeparator && $this->getTemplateService()->getTemplateVariant($previousSeparator->getTemplateId())) {
                 $separatorData = array();
                 $separatorData['is_closing'] = true;
                 $previousVisual = $previousSeparator->getFrontendVisual($this->getPage(), $this->getArticle(), $this->getBlock());

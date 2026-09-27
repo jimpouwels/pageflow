@@ -1,51 +1,51 @@
 <?php
 
-namespace Pageflow\Core\modules\templates\visuals\template_editor;
+namespace Pageflow\Core\modules\templates\visuals\template_variants;
 
 use Pageflow\Core\database\dao\ScopeDao;
 use Pageflow\Core\database\dao\ScopeDaoMysql;
-use Pageflow\Core\database\dao\TemplateDao;
-use Pageflow\Core\database\dao\TemplateDaoMysql;
-use Pageflow\Core\modules\templates\model\Template;
 use Pageflow\Core\view\TemplateData;
+use Pageflow\Core\modules\templates\model\TemplateVariant;
 use Pageflow\Core\view\views\Panel;
 use Pageflow\Core\view\views\Pulldown;
 use Pageflow\Core\view\views\TextField;
+use Pageflow\Core\modules\templates\service\TemplateInteractor;
+use Pageflow\Core\modules\templates\service\TemplateService;
 
-class TemplateEditor extends Panel {
+class TemplateVariantEditor extends Panel {
 
-    private Template $template;
+    private TemplateVariant $templateVariant;
     private ScopeDao $scopeDao;
-    private TemplateDao $templateDao;
+    private TemplateService $templateService;
 
-    public function __construct(Template $template) {
-        parent::__construct('Template bewerken', 'template_editor_panel');
-        $this->template = $template;
+    public function __construct(TemplateVariant $templateVariant) {
+        parent::__construct('Template variant bewerken', 'template_variant_editor_panel');
+        $this->templateVariant = $templateVariant;
         $this->scopeDao = ScopeDaoMysql::getInstance();
-        $this->templateDao = TemplateDaoMysql::getInstance();
+        $this->templateService = TemplateInteractor::getInstance();
     }
 
     public function getPanelContentTemplate(): string {
-        return "templates/templates/template_editor.tpl";
+        return "templates/templates/template_variants/template_variant_editor.tpl";
     }
 
     public function loadPanelContent(TemplateData $data): void {
-        $data->assign("template_id", $this->template->getId());
+        $data->assign("template_variant_id", $this->templateVariant->getId());
         $this->assignEditFields($data);
     }
 
-    private function assignEditFields($data): void {
-        $name_field = new TextField("name", "template_editor_name_field", $this->template->getName(), true, false, null);
+    private function assignEditFields(TemplateData $data): void {
+        $name_field = new TextField("name", "template_variant_editor_name_field", $this->templateVariant->getName(), true, false, null);
         $data->assign("name_field", $name_field->render());
         $data->assign("scopes_field", $this->renderScopesField());
 
-        $templateFileSelect = new Pulldown("template_editor_template_file", $this->getTextResource('template_editor_template_file_field'), $this->template->getTemplateFileId(), $this->getTemplateFilesData(), false, null, true);
-        $data->assign("template_files_selector", $templateFileSelect->render());
+        $templateFileSelect = new Pulldown("template_variant_editor_template", $this->getTextResource('template_variant_editor_template_field'), strval($this->templateVariant->getTemplateId()), $this->getTemplateFilesData(), false, null, true);
+        $data->assign("template_selector", $templateFileSelect->render());
     }
 
     private function getTemplateFilesData(): array {
         $templateFilesData = array();
-        foreach ($this->templateDao->getTemplateFiles() as $templateFile) {
+        foreach ($this->templateService->getTemplates() as $templateFile) {
             $templateFileData = array();
             $templateFileData['name'] = $templateFile->getName();
             $templateFileData['value'] = $templateFile->getId();
@@ -59,7 +59,7 @@ class TemplateEditor extends Panel {
         foreach ($this->scopeDao->getScopes() as $scope) {
             $scopesIdentifierValuePair[] = array("name" => $this->getTextResource($scope->getIdentifier() . '_scope_label'), "value" => $scope->getId());
         }
-        $currentScope = $this->template->getScope();
+        $currentScope = $this->templateVariant->getScope();
         $scopesField = new Pulldown("scope", "Scope", $currentScope->getId(), $scopesIdentifierValuePair, 200, true);
         return $scopesField->render();
     }

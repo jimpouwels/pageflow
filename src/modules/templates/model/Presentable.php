@@ -4,7 +4,7 @@ namespace Pageflow\Core\modules\templates\model;
 
 use Pageflow\Core\core\model\Entity;
 use Pageflow\Core\database\dao\ScopeDaoMysql;
-use Pageflow\Core\database\dao\TemplateDaoMysql;
+use Pageflow\Core\modules\templates\model\TemplateVariant;
 
 abstract class Presentable extends Entity {
 
@@ -15,16 +15,7 @@ abstract class Presentable extends Entity {
         $this->scopeId = $scopeId;
     }
 
-    public function getTemplate(): ?Template {
-        $dao = TemplateDaoMysql::getInstance();
-        if ($this->templateId) {
-            return $dao->getTemplate($this->templateId);
-        } else {
-            return null;
-        }
-    }
-
-    public function setTemplate(Template $template): void {
+    public function setTemplate(TemplateVariant $template): void {
         $this->templateId = $template->getId();
     }
 

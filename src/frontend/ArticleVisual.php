@@ -4,8 +4,8 @@ namespace Pageflow\Core\frontend;
 
 use Pageflow\Core\database\dao\ImageDao;
 use Pageflow\Core\database\dao\ImageDaoMysql;
-use Pageflow\Core\database\dao\TemplateDao;
-use Pageflow\Core\database\dao\TemplateDaoMysql;
+use Pageflow\Core\modules\templates\dao\TemplateDao;
+use Pageflow\Core\modules\templates\dao\TemplateDaoMysql;
 use Pageflow\Core\database\dao\WebformDao;
 use Pageflow\Core\database\dao\WebformDaoMysql;
 use Pageflow\Core\modules\articles\model\Article;
@@ -14,11 +14,9 @@ use Pageflow\Core\modules\articles\service\ArticleService;
 use Pageflow\Core\modules\links\database\dao\ReusableLinkDaoMysql;
 use Pageflow\Core\modules\pages\model\Page;
 use Pageflow\Core\modules\templates\model\Presentable;
-use const Pageflow\core\FRONTEND_TEMPLATE_DIR;
 
 class ArticleVisual extends FrontendVisual {
 
-    private TemplateDao $templateDao;
     private WebformDao $webformDao;
     private ArticleService $articleService;
     private ImageDao $imageDao;
@@ -27,12 +25,11 @@ class ArticleVisual extends FrontendVisual {
         parent::__construct($page, $article);
         $this->webformDao = WebformDaoMysql::getInstance();
         $this->articleService = ArticleInteractor::getInstance();
-        $this->templateDao = TemplateDaoMysql::getInstance();
         $this->imageDao = ImageDaoMysql::getInstance();
     }
 
     public function getTemplateFilename(): string {
-        return FRONTEND_TEMPLATE_DIR . "/" . $this->templateDao->getTemplateFile($this->getArticle()->getTemplate()->getTemplateFileId())->getFileName();
+        return $this->getTemplateFilenameForPresentable();
     }
 
     public function loadVisual(?array &$data): void {

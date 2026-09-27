@@ -3,34 +3,32 @@ templates_module_title: Templates
 templates_scope_list_title: Componenten
 templates_back_to_list: Terug naar lijst
 
-# EDITOR
-template_editor_name_field: Naam
-template_editor_template_file_field: Template bestand
-
 # TAB
+templates_tab_menu_template_variants: Templatevarianten
 templates_tab_menu_templates: Templates
-templates_tab_menu_template_files: Template bestanden
 
-# LIST
-template_list_name_column: Naam
-template_list_delete_column: Verwijderen
+# TEMPLATE VARIANTS
+template_variant_editor_name_field: Naam
+template_variant_editor_template_field: Template
+template_variants_list_name_column: Naam
+template_variants_list_delete_column: Verwijder
 
-# TEMPLATE FILES
-template_files_list_title: Template bestanden
-template_file_editor_panel_title: Template bestand bewerken
+# TEMPLATES
+templates_list_title: Template bestanden
+template_editor_panel_title: Template bestand bewerken
 template_var_migration_panel_title: Migreren van template variabelen
-template_file_editor_name_field: Naam
-template_file_editor_filename_field: Bestandsnaam
-template_file_editor_variables: Standaardwaarden van variabelen
+template_editor_name_field: Naam
+template_editor_filename_field: Bestandsnaam
+template_editor_variables: Standaardwaarden van variabelen
 template_var_editor_panel_title: Bewerk template variabelen
 templates_no_migration_required: Geen nieuwe variabelen gevonden, migratie niet nodig
 
 # MESSAGES
-message_template_file_successfully_deleted: Template bestand verwijderd
+message_template_successfully_deleted: Template bestand verwijderd
 
 # CONFIRMATIONS
 templates_alert_action_error: Fout: Kan de actie niet bepalen
 templates_alert_save_error: Fout: Kan template niet opslaan
 templates_alert_no_templates_selected: U heeft geen templates geselecteerd
-templates_confirm_delete_templates: Weet u zeker dat u de geselecteerde templates wilt verwijderen?
-templates_confirm_delete_template_file: Weet u zeker dat u de geselecteerde template bestand wilt verwijderen?
+templates_confirm_delete_template_variants: Weet u zeker dat u de geselecteerde template varianten wilt verwijderen?
+templates_confirm_delete_template: Weet u zeker dat u de geselecteerde template bestand wilt verwijderen?

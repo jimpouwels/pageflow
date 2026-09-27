@@ -11,7 +11,7 @@ use const Pageflow\CMS_ROOT;
 
 abstract class FormFieldVisual extends FormItemVisual {
 
-    public function __construct(Page $page, ?Article $article, WebForm $webform, WebFormField $webformField) {
+    public function __construct(Page $page, ?Article $article, Webform $webform, WebformField $webformField) {
         parent::__construct($page, $article, $webform, $webformField);
     }
 
@@ -21,7 +21,7 @@ abstract class FormFieldVisual extends FormItemVisual {
 
     public function loadFormItem(): void {
         $mandatory = false;
-        if ($this->getFormItem() instanceof WebFormField) {
+        if ($this->getFormItem() instanceof WebformField) {
             $mandatory = $this->getFormItem()->getMandatory();
         }
         $this->assign('value', FormStatus::getFieldValue($this->getFormItem()->getName()));

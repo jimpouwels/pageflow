@@ -3,12 +3,13 @@
 namespace Pageflow\Core\modules\templates\service;
 
 
-use Pageflow\Core\database\dao\TemplateDao;
-use Pageflow\Core\database\dao\TemplateDaoMysql;
-use Pageflow\Core\modules\templates\model\Template;
-use Pageflow\Core\modules\templates\model\TemplateFile;
+use Pageflow\Core\modules\templates\dao\TemplateDao;
+use Pageflow\Core\modules\templates\dao\TemplateDaoMysql;
+use Pageflow\Core\modules\templates\model\TemplateVariant;
+use Pageflow\Core\modules\templates\model\Template; 
 use Pageflow\Core\modules\templates\model\TemplateVar;
 use Pageflow\Core\modules\templates\model\TemplateVarDef;
+use Pageflow\Core\modules\templates\model\Presentable;
 use Pageflow\Core\utilities\Arrays;
 
 class TemplateInteractor implements TemplateService {
@@ -28,17 +29,33 @@ class TemplateInteractor implements TemplateService {
         return self::$instance;
     }
 
-    public function getTemplateVarDefByTemplateVar(Template $template, TemplateVar $templateVar): TemplateVarDef {
+    public function getTemplateForPresentable(Presentable $presentable): ?Template {
+        $templateVariant = $this->templateDao->getTemplateVariant($presentable->getTemplateId());
+        return $templateVariant ? $this->templateDao->getTemplate($templateVariant->getTemplateId()) : null;
+    }
+
+    public function getTemplateVarDefByTemplateVar(TemplateVariant $template, TemplateVar $templateVar): TemplateVarDef {
         return Arrays::firstMatch($this->getTemplateVarDefsByTemplate($template), function ($templateVarDef) use ($templateVar) {
             return $templateVar->getName() == $templateVarDef->getName();
         });
     }
 
-    public function getTemplateVarDefsByTemplate(Template $template): array {
-        return $this->templateDao->getTemplateVarDefs($this->getTemplateFileForTemplate($template));
+    public function getTemplateVarDefsByTemplate(TemplateVariant $template): array {
+        return $this->templateDao->getTemplateVarDefs($this->getTemplateForTemplateVariant($template));
     }
 
-    public function getTemplateFileForTemplate(Template $template): TemplateFile {
-        return $this->templateDao->getTemplateFile($template->getTemplateFileId());
+    public function getTemplateForTemplateVariant(TemplateVariant $templateVariant): Template {
+        return $this->templateDao->getTemplate($templateVariant->getTemplateId());
+    }
+
+    public function getTemplates(): array {
+        return $this->templateDao->getTemplates();
+    }
+
+    public function getTemplateVariant(?int $templateVariantId): ?TemplateVariant {
+        if (!$templateVariantId) {
+            return null;
+        }
+        return $this->templateDao->getTemplateVariant($templateVariantId);
     }
 }

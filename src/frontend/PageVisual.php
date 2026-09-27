@@ -6,31 +6,27 @@ use Pageflow\Core\database\dao\ArticleDao;
 use Pageflow\Core\database\dao\ArticleDaoMysql;
 use Pageflow\Core\database\dao\BlockDao;
 use Pageflow\Core\database\dao\BlockDaoMysql;
-use Pageflow\Core\database\dao\TemplateDao;
-use Pageflow\Core\database\dao\TemplateDaoMysql;
 use Pageflow\Core\modules\articles\model\Article;
 use Pageflow\Core\modules\pages\model\Page;
+use Pageflow\Core\modules\blocks\model\Block;
 use Pageflow\Core\modules\pages\service\PageInteractor;
 use Pageflow\Core\modules\pages\service\PageService;
 use Pageflow\Core\modules\templates\model\Presentable;
-use const Pageflow\core\FRONTEND_TEMPLATE_DIR;
 
 class PageVisual extends FrontendVisual {
     private PageService $pageService;
     private BlockDao $blockDao;
     private ArticleDao $articleDao;
-    private TemplateDao $templateDao;
 
     public function __construct(Page $page, ?Article $article) {
         parent::__construct($page, $article);
         $this->pageService = PageInteractor::getInstance();
         $this->blockDao = BlockDaoMysql::getInstance();
         $this->articleDao = ArticleDaoMysql::getInstance();
-        $this->templateDao = TemplateDaoMysql::getInstance();
     }
 
     public function getTemplateFilename(): string {
-        return FRONTEND_TEMPLATE_DIR . "/" . $this->templateDao->getTemplateFile($this->getPage()->getTemplate()->getTemplateFileId())->getFileName();
+        return $this->getTemplateFilenameForPresentable();
     }
 
     public function loadVisual(?array &$data): void {
@@ -139,7 +135,7 @@ class PageVisual extends FrontendVisual {
         return $blocks;
     }
 
-    private function renderBlock($block): array {
+    private function renderBlock(Block $block): array {
         $blockData = array();
         $blockVisual = new BlockVisual($block, $this->getPage(), $this->getArticle());
         $blockHtml = $blockVisual->render($blockData);

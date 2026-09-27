@@ -1,8 +1,8 @@
 <?php
 
-namespace Pageflow\Core\modules\templates\visuals\template_editor;
+namespace Pageflow\Core\modules\templates\visuals\template_variants;
 
-use Pageflow\Core\modules\templates\model\Template;
+use Pageflow\Core\modules\templates\model\TemplateVariant;
 use Pageflow\Core\modules\templates\service\TemplateInteractor;
 use Pageflow\Core\modules\templates\service\TemplateService;
 use Pageflow\Core\view\TemplateData;
@@ -11,17 +11,17 @@ use Pageflow\Core\view\views\TextField;
 
 class TemplateVarEditor extends Panel {
 
-    private Template $template;
+    private TemplateVariant $template;
     private TemplateService $templateService;
 
-    public function __construct(Template $template) {
+    public function __construct(TemplateVariant $template) {
         parent::__construct($this->getTextResource('template_var_editor_panel_title'), 'template_editor_panel');
         $this->template = $template;
         $this->templateService = TemplateInteractor::getInstance();
     }
 
     public function getPanelContentTemplate(): string {
-        return "templates/templates/template_var_editor.tpl";
+        return "templates/templates/template_variants/template_variant_var_editor.tpl";
     }
 
     public function loadPanelContent(TemplateData $data): void {

@@ -6,15 +6,24 @@ use Pageflow\Core\authentication\Session;
 use Pageflow\Core\core\BlackBoard;
 use Pageflow\Core\view\TemplateData;
 use Pageflow\Core\view\TemplateEngine;
+use Pageflow\Core\modules\templates\service\TemplateInteractor;
+use Pageflow\Core\modules\templates\service\TemplateService;
 
 abstract class Visual {
 
     private TemplateEngine $templateEngine;
     private TemplateData $templateData;
+    private TemplateService $templateService;
 
     public function __construct(?Visual $parent = null) {
         $this->templateEngine = TemplateEngine::getInstance();
         $this->templateData = $this->templateEngine->createChildData();
+        $this->templateService = TemplateInteractor::getInstance();
+
+    }
+
+    protected function getTemplateService(): TemplateService {
+        return $this->templateService;
     }
 
     public function render(): string {

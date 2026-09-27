@@ -4,9 +4,9 @@ namespace Pageflow\Core\modules\templates;
 
 use Pageflow\Core\core\model\Module;
 use Pageflow\Core\modules\templates\model\Scope;
-use Pageflow\Core\modules\templates\model\Template;
-use Pageflow\Core\modules\templates\visuals\template_editor\TemplateEditorTab;
-use Pageflow\Core\modules\templates\visuals\template_files\TemplateFilesTab;
+use Pageflow\Core\modules\templates\model\TemplateVariant;
+use Pageflow\Core\modules\templates\visuals\template_variants\TemplateVariantEditorTab;
+use Pageflow\Core\modules\templates\visuals\templates\TemplatesTab;
 use Pageflow\Core\view\views\ActionButtonAdd;
 use Pageflow\Core\view\views\ActionButtonDelete;
 use Pageflow\Core\view\views\ActionButtonReload;
@@ -15,21 +15,20 @@ use Pageflow\Core\view\views\ModuleVisual;
 use Pageflow\Core\view\views\TabMenu;
 
 class TemplateModuleVisual extends ModuleVisual {
-    private static int $TEMPLATES_TAB = 0;
-    private static int $TEMPLATE_FILES_TAB = 1;
-    private static string $HEAD_INCLUDES_TEMPLATE = "templates/templates/head_includes.tpl";
+    private static int $TEMPLATES_VARIANTS_TAB = 0;
+    private static int $TEMPLATE_TAB = 1;
 
-    private ?Template $currentTemplate;
+    private ?TemplateVariant $currentTemplateVariant;
     private ?Scope $currentScope;
     private Module $module;
     private TemplateEditorRequestHandler $templateEditorRequestHandler;
-    private TemplateFilesRequestHandler $templateFilesRequestHandler;
+    private TemplateRequestHandler $templateRequestHandler;
 
     public function __construct(Module $module) {
         parent::__construct($module);
         $this->module = $module;
         $this->templateEditorRequestHandler = new TemplateEditorRequestHandler();
-        $this->templateFilesRequestHandler = new TemplateFilesRequestHandler();
+        $this->templateRequestHandler = new TemplateRequestHandler();
     }
 
     public function getTemplateFilename(): string {
@@ -37,32 +36,32 @@ class TemplateModuleVisual extends ModuleVisual {
     }
 
     public function load(): void {
-        if ($this->getCurrentTabId() == self::$TEMPLATES_TAB) {
-            $content = new TemplateEditorTab($this->currentTemplate, $this->currentScope);
+        if ($this->getCurrentTabId() == self::$TEMPLATES_VARIANTS_TAB) {
+            $content = new TemplateVariantEditorTab($this->currentTemplateVariant, $this->currentScope);
         } else {
-            $content = new TemplateFilesTab($this->templateFilesRequestHandler);
+            $content = new TemplatesTab($this->templateRequestHandler);
         }
         $this->assign("content", $content->render());
     }
 
     public function getActionButtons(): array {
         $actionButtons = array();
-        if ($this->getCurrentTabId() == self::$TEMPLATES_TAB) {
-            if ($this->currentTemplate) {
+        if ($this->getCurrentTabId() == self::$TEMPLATES_VARIANTS_TAB) {
+            if ($this->currentTemplateVariant) {
+                $actionButtons[] = new ActionButtonSave('update_template_variant');
+            }
+            $actionButtons[] = new ActionButtonAdd('add_template_variant');
+            if ($this->currentScope) {
+                $actionButtons[] = new ActionButtonDelete('delete_template_variant');
+            }
+        } else if ($this->getCurrentTabId() == self::$TEMPLATE_TAB) {
+            if ($this->templateRequestHandler->getCurrentTemplate()) {
                 $actionButtons[] = new ActionButtonSave('update_template');
             }
             $actionButtons[] = new ActionButtonAdd('add_template');
-            if ($this->currentScope) {
+            if ($this->templateRequestHandler->getCurrentTemplate()) {
+                $actionButtons[] = new ActionButtonReload('reload_template');
                 $actionButtons[] = new ActionButtonDelete('delete_template');
-            }
-        } else if ($this->getCurrentTabId() == self::$TEMPLATE_FILES_TAB) {
-            if ($this->templateFilesRequestHandler->getCurrentTemplateFile()) {
-                $actionButtons[] = new ActionButtonSave('update_template_file');
-            }
-            $actionButtons[] = new ActionButtonAdd('add_template_file');
-            if ($this->templateFilesRequestHandler->getCurrentTemplateFile()) {
-                $actionButtons[] = new ActionButtonReload('reload_template_file');
-                $actionButtons[] = new ActionButtonDelete('delete_template_file');
             }
         }
         return $actionButtons;
@@ -83,12 +82,12 @@ class TemplateModuleVisual extends ModuleVisual {
     public function getRequestHandlers(): array {
         $requestHandlers = array();
         $requestHandlers[] = $this->templateEditorRequestHandler;
-        $requestHandlers[] = $this->templateFilesRequestHandler;
+        $requestHandlers[] = $this->templateRequestHandler;
         return $requestHandlers;
     }
 
     public function onRequestHandled(): void {
-        $this->currentTemplate = $this->templateEditorRequestHandler->getCurrentTemplate();
+        $this->currentTemplateVariant = $this->templateEditorRequestHandler->getCurrentTemplateVariant();
         $this->currentScope = $this->templateEditorRequestHandler->getCurrentScope();
     }
 
@@ -97,8 +96,8 @@ class TemplateModuleVisual extends ModuleVisual {
     }
 
     public function loadTabMenu(TabMenu $tabMenu): int {
-        $tabMenu->addItem("templates_tab_menu_templates", self::$TEMPLATES_TAB);
-        $tabMenu->addItem("templates_tab_menu_template_files", self::$TEMPLATE_FILES_TAB);
+        $tabMenu->addItem("templates_tab_menu_template_variants", self::$TEMPLATES_VARIANTS_TAB);
+        $tabMenu->addItem("templates_tab_menu_templates", self::$TEMPLATE_TAB);
         return $this->getCurrentTabId();
     }
 }

@@ -1,17 +1,17 @@
 <?php
 
-namespace Pageflow\Core\modules\templates\visuals\template_editor;
+namespace Pageflow\Core\modules\templates\visuals\template_variants;
 
-use Pageflow\Core\database\dao\TemplateDao;
-use Pageflow\Core\database\dao\TemplateDaoMysql;
+use Pageflow\Core\modules\templates\dao\TemplateDao;
+use Pageflow\Core\modules\templates\dao\TemplateDaoMysql;
 use Pageflow\Core\modules\templates\model\Scope;
-use Pageflow\Core\modules\templates\model\Template;
+use Pageflow\Core\modules\templates\model\TemplateVariant;
 use Pageflow\Core\view\TemplateData;
 use Pageflow\Core\view\views\InformationMessage;
 use Pageflow\Core\view\views\Panel;
 use Pageflow\Core\view\views\SingleCheckbox;
 
-class TemplateList extends Panel {
+class TemplateVariantsList extends Panel {
 
     private TemplateDao $templateDao;
     private Scope $scope;
@@ -23,29 +23,29 @@ class TemplateList extends Panel {
     }
 
     public function getPanelContentTemplate(): string {
-        return "templates/templates/template_list.tpl";
+        return "templates/templates/template_variants/template_variant_list.tpl";
     }
 
     public function loadPanelContent(TemplateData $data): void {
         $data->assign("scope", $this->scope->getIdentifier());
-        $data->assign("templates", $this->getTemplatesForScope($this->scope));
+        $data->assign("template_variants", $this->getTemplateVariantsForScope($this->scope));
         $data->assign("information_message", $this->renderInformationMessage());
     }
 
-    private function getTemplatesForScope(Scope $scope): array {
+    private function getTemplateVariantsForScope(Scope $scope): array {
         $templatesData = array();
-        foreach ($this->templateDao->getTemplatesByScope($scope) as $template) {
+        foreach ($this->templateDao->getTemplateVariantsByScope($scope) as $templateVariant) {
             $templateData = array();
-            $templateData["id"] = $template->getId();
-            $templateData["name"] = $template->getName();
-            $templateData["delete_checkbox"] = $this->renderDeleteCheckBox($template);
+            $templateData["id"] = $templateVariant->getId();
+            $templateData["name"] = $templateVariant->getName();
+            $templateData["delete_checkbox"] = $this->renderDeleteCheckBox($templateVariant);
             $templatesData[] = $templateData;
         }
         return $templatesData;
     }
 
-    private function renderDeleteCheckBox(Template $template): string {
-        $checkbox = new SingleCheckbox("template_" . $template->getId() . "_delete", "", "", false, "");
+    private function renderDeleteCheckBox(TemplateVariant $templateVariant): string {
+        $checkbox = new SingleCheckbox("template_variant_" . $templateVariant->getId() . "_delete", "", "", false, "");
         return $checkbox->render();
     }
 

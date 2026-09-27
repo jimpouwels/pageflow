@@ -3,34 +3,32 @@ templates_module_title: Templates
 templates_scope_list_title: Components
 templates_back_to_list: Back to list
 
-# EDITOR
-template_editor_name_field: Name
-template_editor_template_file_field: Template file
-
 # TAB
+templates_tab_menu_template_variants: Template variants
 templates_tab_menu_templates: Templates
-templates_tab_menu_template_files: Template Files
 
-# LIST
+# TEMPLATE VARIANTS
+template_variant_editor_name_field: Name
+template_variant_editor_template_field: Template
 template_list_name_column: Name
 template_list_delete_column: Delete
 
-# TEMPLATE FILES
-template_files_list_title: Template files
-template_file_editor_panel_title: Edit template file
+# TEMPLATES
+template_list_title: Template files
+template_editor_panel_title: Edit template file
 template_var_migration_panel_title: Migrate template variables
-template_file_editor_name_field: Name
-template_file_editor_filename_field: Filename
-template_file_editor_variables: Default values of variables
+template_editor_name_field: Name
+template_editor_filename_field: Filename
+template_editor_variables: Default values of variables
 template_var_editor_panel_title: Edit template variables
 templates_no_migration_required: No new variables found, no migration needed
 
 # MESSAGES
-message_template_file_successfully_deleted: Template file deleted
+message_template_successfully_deleted: Template file deleted
 
 # CONFIRMATIONS
 templates_alert_action_error: Error: Cannot determine action
 templates_alert_save_error: Error: Cannot save template
 templates_alert_no_templates_selected: No templates selected
-templates_confirm_delete_templates: Are you sure you want to delete the selected templates?
-templates_confirm_delete_template_file: Are you sure you want to delete the selected template file?
+templates_confirm_delete_template_variants: Are you sure you want to delete the selected template variants?
+templates_confirm_delete_template: Are you sure you want to delete the selected template?

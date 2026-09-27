@@ -3,24 +3,19 @@
 namespace Pageflow\Core\frontend;
 
 use Pageflow\Core\core\model\Element;
-use Pageflow\Core\database\dao\TemplateDao;
-use Pageflow\Core\database\dao\TemplateDaoMysql;
 use Pageflow\Core\modules\articles\model\Article;
 use Pageflow\Core\modules\blocks\model\Block;
 use Pageflow\Core\modules\pages\model\Page;
 use Pageflow\Core\modules\templates\model\Presentable;
-use const Pageflow\core\FRONTEND_TEMPLATE_DIR;
 use const Pageflow\CMS_ROOT;
 
 abstract class ElementFrontendVisual extends FrontendVisual {
 
     private Element $element;
-    private TemplateDao $templateDao;
 
     public function __construct(Page $page, ?Article $article, ?Block $block, Element $element) {
         parent::__construct($page, $article, $block);
         $this->element = $element;
-        $this->templateDao = TemplateDaoMysql::getInstance();
     }
 
     public function getTemplateFilename(): string {
@@ -28,7 +23,7 @@ abstract class ElementFrontendVisual extends FrontendVisual {
     }
 
     public function getElementTemplateFilename(): string {
-        return FRONTEND_TEMPLATE_DIR . "/" . $this->templateDao->getTemplateFile($this->getElement()->getTemplate()->getTemplateFileId())->getFileName();
+        return $this->getTemplateFilenameForPresentable();
     }
 
     abstract function loadElement(array &$data): void;
@@ -44,8 +39,9 @@ abstract class ElementFrontendVisual extends FrontendVisual {
             }
         }
         $this->assign("element_html", "");
-        if ($this->getElement()->getTemplate()) {
-            $this->assign("element_html", $this->fetch($this->getElementTemplateFilename()));
+        $elementTemplate = $this->getTemplateService()->getTemplateForPresentable($this->getElement());
+        if ($elementTemplate) {
+            $this->assign("element_html", $this->fetch($this->getFrontendTemplateDir() . "/" . $elementTemplate->getFileName()));
         }
     }
 

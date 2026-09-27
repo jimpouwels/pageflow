@@ -21,10 +21,10 @@ class ListElementFrontendVisual extends ElementFrontendVisual {
 
     public function loadElement(array &$data): void {
         $data["title"] = $this->toHtml($this->getElement()->getTitle());
-        $data["items"] = $this->renderListItems($this->getElementHolder());
+        $data["items"] = $this->renderListItems();
     }
 
-    private function renderListItems(ElementHolder $element_holder): array {
+    private function renderListItems(): array {
         $listItems = array();
         
         foreach ($this->getElement()->getListItems() as     $listItem) {

@@ -33,7 +33,7 @@ abstract class ElementVisual extends Visual {
         $element = $this->getElement();
         $elementType = $this->elementDao->getElementTypeForElement($element->getId());
 
-        $templatePicker = new TemplatePicker("element_" . $element->getId() . "_template", "", false, "template_picker", $element->getTemplate(), $elementType->getScope());
+        $templatePicker = new TemplatePicker("element_" . $element->getId() . "_template", "", false, "template_picker", $this->getTemplateService()->getTemplateVariant($element->getTemplateId()), $elementType->getScope());
 
         $panelContentTemplateData = $this->createChildData();
         $this->loadElementForm($panelContentTemplateData);
