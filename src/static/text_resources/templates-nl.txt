@@ -22,6 +22,8 @@ template_editor_filename_field: Bestandsnaam
 template_editor_variables: Standaardwaarden van variabelen
 template_var_editor_panel_title: Bewerk template variabelen
 templates_no_migration_required: Geen nieuwe variabelen gevonden, migratie niet nodig
+templates.code_editor.panel_title: Pas code aan
+templates.code_viewer.panel_title: Code uit templatebestand
 
 # MESSAGES
 message_template_successfully_deleted: Template bestand verwijderd

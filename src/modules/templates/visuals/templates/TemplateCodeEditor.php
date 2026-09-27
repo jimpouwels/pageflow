@@ -12,7 +12,7 @@ class TemplateCodeEditor extends Panel {
     private Template $template;
 
     public function __construct(Template $template) {
-        parent::__construct($this->getTextResource('template.code_editor.panel_title'), 'template_content_panel');
+        parent::__construct($this->getTextResource('templates.code_editor.panel_title'), 'template_content_panel');
         $this->template = $template;
     }
 

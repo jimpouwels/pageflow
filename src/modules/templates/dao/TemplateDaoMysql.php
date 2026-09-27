@@ -157,7 +157,7 @@ class TemplateDaoMysql implements TemplateDao {
     }
 
     public function getTemplates(): array {
-        $statement = $this->mysqlConnector->prepareStatement("SELECT * FROM templates");
+        $statement = $this->mysqlConnector->prepareStatement("SELECT * FROM templates ORDER BY name ASC");
         $result = $this->mysqlConnector->executeStatement($statement);
 
         $templateFiles = array();

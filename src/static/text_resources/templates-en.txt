@@ -22,6 +22,8 @@ template_editor_filename_field: Filename
 template_editor_variables: Default values of variables
 template_var_editor_panel_title: Edit template variables
 templates_no_migration_required: No new variables found, no migration needed
+templates.code_editor.panel_title: Edit code
+templates.code_viewer.panel_title: Code from file
 
 # MESSAGES
 message_template_successfully_deleted: Template file deleted

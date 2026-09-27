@@ -11,7 +11,7 @@ class TemplateCodeViewer extends Panel {
     private Template $template;
 
     public function __construct(Template $template) {
-        parent::__construct($this->getTextResource('template.code_viewer.panel_title'), 'template_content_panel');
+        parent::__construct($this->getTextResource('templates.code_viewer.panel_title'), 'template_content_panel');
         $this->template = $template;
     }
 
