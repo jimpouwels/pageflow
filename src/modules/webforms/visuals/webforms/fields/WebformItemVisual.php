@@ -10,11 +10,11 @@ use Pageflow\Core\view\views\Visual;
 
 abstract class WebformItemVisual extends Visual {
 
-    private WebformItem $_webform_item;
+    private WebformItem $webformItem;
 
-    public function __construct(WebformItem $webform_item) {
+    public function __construct(WebformItem $webformItem) {
         parent::__construct();
-        $this->_webform_item = $webform_item;
+        $this->webformItem = $webformItem;
     }
 
     public function getTemplateFilename(): string {
@@ -22,7 +22,7 @@ abstract class WebformItemVisual extends Visual {
     }
 
     protected function getWebFormItem(): WebformItem {
-        return $this->_webform_item;
+        return $this->webformItem;
     }
 
     abstract function getFormItemTemplate(): string;
@@ -30,20 +30,20 @@ abstract class WebformItemVisual extends Visual {
     abstract function loadItemContent(TemplateData $data): void;
 
     public function load(): void {
-        $form_item_content_template_data = $this->createChildData();
-        $this->loadItemContent($form_item_content_template_data);
+        $formItemContentTemplateData = $this->createChildData();
+        $this->loadItemContent($formItemContentTemplateData);
 
-        $template_picker = new TemplatePicker("webform_item_{$this->_webform_item->getId()}_template", "", false, "template_picker", $this->_webform_item->getTemplate(), $this->_webform_item->getScope());
-        $this->assign('template_picker', $template_picker->render());
+        $templatePicker = new TemplatePicker("webform_item_{$this->webformItem->getId()}_template", "", false, "template_picker", $this->getTemplateService()->getTemplateVariant($this->webformItem->getTemplateId()), $this->webformItem->getScope());
+        $this->assign('template_picker', $templatePicker->render());
 
-        $this->assign('id', $this->_webform_item->getId());
-        $this->assign('type', $this->_webform_item->getType());
+        $this->assign('id', $this->webformItem->getId());
+        $this->assign('type', $this->webformItem->getType());
         $this->assign('index', 0);
-        $label_field = new TextField("webform_item_{$this->_webform_item->getId()}_label", "webforms_editor_field_label_label", $this->_webform_item->getLabel(), true, false, null);
-        $name_field = new TextField("webform_item_{$this->_webform_item->getId()}_name", "webforms_editor_field_name_label", $this->_webform_item->getName(), true, false, null);
-        $this->assign("name_field", $name_field->render());
-        $this->assign("label_field", $label_field->render());
-        $this->assign('item_editor', $this->getTemplateEngine()->fetch($this->getFormItemTemplate(), $form_item_content_template_data));
+        $nameField = new TextField("webform_item_{$this->webformItem->getId()}_name", "webforms_editor_field_name_label", $this->webformItem->getName(), true, false, null);
+        $labelField = new TextField("webform_item_{$this->webformItem->getId()}_label", "webforms_editor_field_label_label", $this->webformItem->getLabel(), true, false, null);
+        $this->assign("name_field", $nameField->render());
+        $this->assign("label_field", $labelField->render());
+        $this->assign('item_editor', $this->getTemplateEngine()->fetch($this->getFormItemTemplate(), $formItemContentTemplateData));
     }
 
 }
