@@ -29,7 +29,7 @@ class WebformMetadataEditor extends Panel {
         $titleTextField = new TextField("title", "webforms_editor_title_field", $this->currentWebForm->getTitle(), true, false, null);
         $data->assign("title_field", $titleTextField->render());
 
-        $templatePickerField = new TemplatePicker("template", $this->getTextResource("webforms_editor_template_field"), $this->currentWebForm->getTemplateId(), false, "", $this->_current_webform->getScope());
+        $templatePickerField = new TemplatePicker("template", $this->getTextResource("webforms_editor_template_field"), $this->currentWebForm->getTemplateId(), false, "", $this->currentWebform->getScope());
         $data->assign('template_picker', $templatePickerField->render());
 
         $captchaFieldKeyClass = "captcha_key_field_{$this->currentWebForm->getId()}";
