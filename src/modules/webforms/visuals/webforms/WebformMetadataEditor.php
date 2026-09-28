@@ -43,7 +43,7 @@ class WebformMetadataEditor extends Panel {
         $data->assign('captcha_secret_field', $captchaSecretField->render());
 
         $captchaCheckbox = new SingleCheckbox('include_captcha', 'webforms_editor_captcha_field', $this->currentWebForm->getIncludeCaptcha(), false, null);
-        $captchaCheckbox->setOnChangeJS("onCaptchaChanged('{$captcha_key_field_class}')");
+        $captchaCheckbox->setOnChangeJS("onCaptchaChanged('{$captchaFieldKeyClass}')");
         $data->assign("include_captcha_field", $captchaCheckbox->render());
     }
 
