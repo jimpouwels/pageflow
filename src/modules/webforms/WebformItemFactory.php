@@ -16,8 +16,8 @@ use Pageflow\Core\modules\webforms\visuals\webforms\fields\WebformItemVisual;
 
 class WebformItemFactory {
 
-    private array $_types = array();
-    private static ?WebformItemFactory $_instance = null;
+    private array $types = array();
+    private static ?WebformItemFactory $instance = null;
 
     private function __construct() {
         $this->addType(WebformTextfield::$TYPE, "WebformTextfieldVisual", "WebformTextfieldForm", "FormTextfieldVisual");
@@ -27,10 +27,10 @@ class WebformItemFactory {
     }
 
     public static function getInstance(): WebformItemFactory {
-        if (!self::$_instance) {
-            self::$_instance = new WebformItemFactory();
+        if (!self::$instance) {
+            self::$instance = new WebformItemFactory();
         }
-        return self::$_instance;
+        return self::$instance;
     }
 
     public function getBackendVisualFor(WebformItem $webform_item): WebformItemVisual {
@@ -48,17 +48,17 @@ class WebformItemFactory {
         return new $className($page, $article, $webform, $webform_item);
     }
 
-    private function getFormItemType(string $type_to_find): FormItemType {
-        $found_type = null;
-        foreach ($this->_types as $type) {
-            if ($type->getTypeName() == $type_to_find) {
-                $found_type = $type;
+    private function getFormItemType(string $typeToFind): FormItemType {
+        $foundType = null;
+        foreach ($this->types as $type) {
+            if ($type->getTypeName() == $typeToFind) {
+                $foundType = $type;
             }
         }
-        return $found_type;
+        return $foundType;
     }
 
-    private function addType(string $type_name, string $backend_visual_classname, string $backend_form_classname, string $frontend_visual_classname): void {
-        $this->_types[] = new FormItemType($type_name, $backend_visual_classname, $backend_form_classname, $frontend_visual_classname);
+    private function addType(string $typeName, string $backendVisualClassname, string $backendFormClassname, string $frontendVisualClassname): void {
+        $this->types[] = new FormItemType($typeName, $backendVisualClassname, $backendFormClassname, $frontendVisualClassname);
     }
 }

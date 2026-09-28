@@ -9,35 +9,33 @@ use Pageflow\Core\modules\webforms\handlers\RedirectFormHandler;
 
 class WebformHandlerManager {
 
-    private array $_all_handlers = array();
-    private static ?WebformHandlerManager $_instance = null;
+    private array $allHandlers = array();
+    private static ?WebformHandlerManager $instance = null;
 
     private function __construct() {
-        $this->_all_handlers[] = new EmailFormHandler();
-        $this->_all_handlers[] = new RedirectFormHandler();
-        $this->_all_handlers[] = new ArticleCommentFormHandler();
+        $this->allHandlers[] = new EmailFormHandler();
+        $this->allHandlers[] = new RedirectFormHandler();
+        $this->allHandlers[] = new ArticleCommentFormHandler();
     }
 
     public static function getInstance() {
-        if (!self::$_instance) {
-            self::$_instance = new WebformHandlerManager();
+        if (!self::$instance) {
+            self::$instance = new WebformHandlerManager();
         }
-        return self::$_instance;
+        return self::$instance;
     }
 
     public function getHandler(string $type): FormHandler {
-        $found_handler = null;
-        foreach ($this->_all_handlers as $handler) {
+        $foundHandler = null;
+        foreach ($this->allHandlers as $handler) {
             if ($handler->getType() == $type) {
-                $found_handler = $handler;
+                $foundHandler = $handler;
             }
         }
-        return $found_handler;
+        return $foundHandler;
     }
 
     public function getAllHandlers(): array {
-        return $this->_all_handlers;
+        return $this->allHandlers;
     }
 }
-
-?>

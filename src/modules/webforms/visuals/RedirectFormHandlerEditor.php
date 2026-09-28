@@ -10,7 +10,7 @@ use Pageflow\Core\view\views\Visual;
 
 class RedirectFormHandlerEditor extends Visual {
 
-    private ?WebformHandlerProperty $_property = null;
+    private ?WebformHandlerProperty $property = null;
     private PageService $pageService;
 
     public function __construct() {
@@ -23,9 +23,9 @@ class RedirectFormHandlerEditor extends Visual {
     }
 
     public function load(): void {
-        $id = $this->_property->getId();
+        $id = $this->property->getId();
 
-        $selectedValue = $this->_property->getValue();
+        $selectedValue = $this->property->getValue();
         $pageLookup = new PageLookup(
             "handler_property_{$id}_field",
             'webforms_redirect_handler_page_picker',
@@ -41,7 +41,7 @@ class RedirectFormHandlerEditor extends Visual {
     }
 
     public function setCurrentValue(WebformHandlerProperty $property): void {
-        $this->_property = $property;
+        $this->property = $property;
     }
 
 }

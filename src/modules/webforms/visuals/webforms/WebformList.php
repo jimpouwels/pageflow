@@ -11,13 +11,13 @@ use Pageflow\Core\view\views\Panel;
 
 class WebformList extends Panel {
 
-    private ?WebForm $_current_webform;
-    private WebformDao $_webform_dao;
+    private ?WebForm $currentWebform;
+    private WebformDao $webformDao;
 
-    public function __construct(?WebForm $current_webform, WebformRequestHandler $webform_request_handler) {
+    public function __construct(?WebForm $currentWebform) {
         parent::__construct("webforms_list_panel_title", 'webforms_list');
-        $this->_current_webform = $current_webform;
-        $this->_webform_dao = WebformDaoMysql::getInstance();
+        $this->currentWebform = $currentWebform;
+        $this->webformDao = WebformDaoMysql::getInstance();
     }
 
     public function getPanelContentTemplate(): string {
@@ -25,15 +25,15 @@ class WebformList extends Panel {
     }
 
     public function loadPanelContent(TemplateData $data): void {
-        $webforms = $this->_webform_dao->getAllWebForms();
+        $webforms = $this->webformDao->getAllWebForms();
         $webforms_data = array();
         foreach ($webforms as $webform) {
             $webform_data = array();
             $webform_data["id"] = $webform->getId();
             $webform_data["title"] = $webform->getTitle();
             $is_selected = false;
-            if ($this->_current_webform) {
-                $is_selected = $webform->getId() == $this->_current_webform->getId();
+            if ($this->currentWebform) {
+                $is_selected = $webform->getId() == $this->currentWebform->getId();
             }
             $webform_data["is_selected"] = $is_selected;
             $webforms_data[] = $webform_data;

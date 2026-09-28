@@ -24,14 +24,14 @@ class WebformEditor extends Panel {
     }
 
     public function loadPanelContent(TemplateData $data): void {
-        $add_textfield_button = new Button("", "webforms_add_textfield_button_label", "addFormField('textfield');");
-        $data->assign("button_add_textfield", $add_textfield_button->render());
+        $addTextFieldButton = new Button("", "webforms_add_textfield_button_label", "addFormField('textfield');");
+        $data->assign("button_add_textfield", $addTextFieldButton->render());
 
-        $add_textarea_button = new Button("", "webforms_add_textarea_button_label", "addFormField('textarea');");
-        $data->assign("button_add_textarea", $add_textarea_button->render());
+        $addTextAreaButton = new Button("", "webforms_add_textarea_button_label", "addFormField('textarea');");
+        $data->assign("button_add_textarea", $addTextAreaButton->render());
 
-        $add_button_button = new Button("", "webforms_add_button_button_label", "addFormField('button');");
-        $data->assign("button_add_button", $add_button_button->render());
+        $addButtonButton = new Button("", "webforms_add_button_button_label", "addFormField('button');");
+        $data->assign("button_add_button", $addButtonButton->render());
 
         $data->assign("form_fields", $this->renderFormFields());
     }

@@ -35,19 +35,19 @@ class WebFormsModuleVisual extends ModuleVisual {
     }
 
     public function getActionButtons(): array {
-        $action_buttons = array();
+        $actionButtons = array();
         if ($this->currentTabId == self::$FORMS_TAB) {
-            $save_button = null;
-            $delete_button = null;
+            $saveButton = null;
+            $deleteButton = null;
             if (!is_null($this->webformRequestHandler->getCurrentWebForm())) {
-                $save_button = new ActionButtonSave('update_webform');
-                $delete_button = new ActionButtonDelete('delete_webform');
+                $saveButton = new ActionButtonSave('update_webform');
+                $deleteButton = new ActionButtonDelete('delete_webform');
             }
-            $action_buttons[] = $save_button;
-            $action_buttons[] = new ActionButtonAdd('add_webform');
-            $action_buttons[] = $delete_button;
+            $actionButtons[] = $saveButton;
+            $actionButtons[] = new ActionButtonAdd('add_webform');
+            $actionButtons[] = $deleteButton;
         }
-        return $action_buttons;
+        return $actionButtons;
     }
 
     public function renderStyles(): array {
@@ -63,9 +63,9 @@ class WebFormsModuleVisual extends ModuleVisual {
     }
 
     public function getRequestHandlers(): array {
-        $request_handlers = array();
-        $request_handlers[] = $this->webformRequestHandler;
-        return $request_handlers;
+        $requestHandlers = array();
+        $requestHandlers[] = $this->webformRequestHandler;
+        return $requestHandlers;
     }
 
     public function onRequestHandled(): void {}

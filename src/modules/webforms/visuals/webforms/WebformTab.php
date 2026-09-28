@@ -9,13 +9,11 @@ use const Pageflow\Core\ACTION_FORM_ID;
 
 class WebformTab extends Visual {
 
-    private ?WebForm $_current_webform;
-    private WebformRequestHandler $_webform_request_handler;
+    private ?WebForm $currentWebform;
 
-    public function __construct($webform_requestHandler) {
+    public function __construct(WebformRequestHandler $webformRequestHandler) {
         parent::__construct();
-        $this->_webform_request_handler = $webform_requestHandler;
-        $this->_current_webform = $this->_webform_request_handler->getCurrentWebForm();
+        $this->currentWebform = $webformRequestHandler->getCurrentWebForm();
     }
 
     public function getTemplateFilename(): string {
@@ -25,8 +23,8 @@ class WebformTab extends Visual {
     public function load(): void {
         $this->assign("action_form_id", ACTION_FORM_ID);
         $this->assign('list', $this->renderWebFormsList());
-        if ($this->_current_webform) {
-            $this->assign('id', $this->_current_webform->getId());
+        if ($this->currentWebform) {
+            $this->assign('id', $this->currentWebform->getId());
             $this->assign('metadata_editor', $this->renderMetadataEditor());
             $this->assign('webform_editor', $this->renderWebFormEditor());
             $this->assign('handlers_editor', $this->renderHandlersEditor());
@@ -34,22 +32,22 @@ class WebformTab extends Visual {
     }
 
     private function renderWebFormsList(): string {
-        $webform_list = new WebformList($this->_current_webform, $this->_webform_request_handler);
-        return $webform_list->render();
+        $webformList = new WebformList($this->currentWebform);
+        return $webformList->render();
     }
 
     private function renderMetadataEditor(): string {
-        $metadata_editor = new WebformMetadataEditor($this->_current_webform);
-        return $metadata_editor->render();
+        $metadataEditor = new WebformMetadataEditor($this->currentWebform);
+        return $metadataEditor->render();
     }
 
     private function renderWebFormEditor(): string {
-        $webform_editor = new WebformEditor($this->_current_webform);
-        return $webform_editor->render();
+        $webformEditor = new WebformEditor($this->currentWebform);
+        return $webformEditor->render();
     }
 
     private function renderHandlersEditor(): string {
-        $handlers_editor = new HandlersEditor($this->_current_webform);
-        return $handlers_editor->render();
+        $handlersEditor = new HandlersEditor($this->currentWebform);
+        return $handlersEditor->render();
     }
 }
