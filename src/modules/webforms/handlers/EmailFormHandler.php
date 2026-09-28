@@ -36,7 +36,7 @@ class EmailFormHandler extends FormHandler {
     public function handle(array $fields, Page $page, ?Article $article): void {
         $message = $this->getFilledInPropertyValue('template');
         $subject = $this->getFilledInPropertyValue('subject');
-        $targetEmailAddress = $this->_settings_dao->getSettings()->getEmailAddress();
+        $targetEmailAddress = $this->settingsDao->getSettings()->getEmailAddress();
         if (!$targetEmailAddress) {
             $targetEmailAddress = $this->getProperty('target_email_address');
         }
