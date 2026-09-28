@@ -10,13 +10,13 @@ use Pageflow\Core\view\views\Panel;
 
 class WebformEditor extends Panel {
 
-    private WebForm $_current_webform;
-    private WebformItemFactory $_webform_item_factory;
+    private WebForm $currentWebform;
+    private WebformItemFactory $webformItemFactory;
 
-    public function __construct(?WebForm $current_webform) {
+    public function __construct(?WebForm $currentWebform) {
         parent::__construct("webforms_webform_editor_panel_title");
-        $this->_webform_item_factory = WebformItemFactory::getInstance();
-        $this->_current_webform = $current_webform;
+        $this->webformItemFactory = WebformItemFactory::getInstance();
+        $this->currentWebform = $currentWebform;
     }
 
     public function getPanelContentTemplate(): string {
@@ -37,12 +37,12 @@ class WebformEditor extends Panel {
     }
 
     private function renderFormFields(): array {
-        $form_fields_data = array();
-        foreach ($this->_current_webform->getFormFields() as $form_field) {
-            $form_field_data = $this->_webform_item_factory->getBackendVisualFor($form_field);
-            $form_fields_data[] = $form_field_data->render();
+        $formFieldsData = array();
+        foreach ($this->currentWebform->getFormFields() as $formField) {
+            $formFieldData = $this->webformItemFactory->getBackendVisualFor($formField);
+            $formFieldsData[] = $formFieldData->render();
         }
-        return $form_fields_data;
+        return $formFieldsData;
     }
 
 }

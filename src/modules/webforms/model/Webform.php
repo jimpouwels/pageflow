@@ -7,18 +7,18 @@ use Pageflow\Core\modules\templates\model\Presentable;
 class Webform extends Presentable {
 
     public static int $SCOPE = 19;
-    private string $_title;
-    private array $_form_fields;
-    private bool $_include_captcha;
-    private ?string $_captcha_key;
+    private string $title;
+    private array $formFields;
+    private bool $includeCaptcha;
+    private ?string $captchaKey;
 
     public function __construct() {
         parent::__construct(self::$SCOPE);
     }
 
-    public static function constructFromRecord(array $record, array $form_fields): Webform {
+    public static function constructFromRecord(array $record, array $formFields): Webform {
         $form = new Webform();
-        $form->setFormFields($form_fields);
+        $form->setFormFields($formFields);
         $form->initFromDb($record);
         return $form;
     }
@@ -31,44 +31,44 @@ class Webform extends Presentable {
     }
 
     public function getTitle(): string {
-        return $this->_title;
+        return $this->title;
     }
 
     public function setTitle(string $title): void {
-        $this->_title = $title;
+        $this->title = $title;
     }
 
     public function getFormFields(): array {
-        usort($this->_form_fields, function (WebFormItem $f1, WebFormItem $f2) {
+        usort($this->formFields, function (WebFormItem $f1, WebFormItem $f2) {
             return $f1->getOrderNr() - $f2->getOrderNr();
         });
-        return $this->_form_fields;
+        return $this->formFields;
     }
 
-    public function setFormFields(array $form_fields): void {
-        $this->_form_fields = $form_fields;
+    public function setFormFields(array $formFields): void {
+        $this->formFields = $formFields;
     }
 
-    public function deleteWebFormItem(int $form_item_id): void {
-        $this->_form_fields = array_filter($this->_form_fields, function ($item) use ($form_item_id) {
-            return $item->getId() !== $form_item_id;
+    public function deleteWebFormItem(int $formItemId): void {
+        $this->formFields = array_filter($this->formFields, function ($item) use ($formItemId) {
+            return $item->getId() !== $formItemId;
         });
     }
 
     public function getIncludeCaptcha(): bool {
-        return $this->_include_captcha;
+        return $this->includeCaptcha;
     }
 
-    public function setIncludeCaptcha(bool $include_captcha): void {
-        $this->_include_captcha = $include_captcha;
+    public function setIncludeCaptcha(bool $includeCaptcha): void {
+        $this->includeCaptcha = $includeCaptcha;
     }
 
     public function getCaptchaKey(): ?string {
-        return $this->_captcha_key;
+        return $this->captchaKey;
     }
 
-    public function setCaptchaKey(?string $captcha_key): void {
-        $this->_captcha_key = $captcha_key;
+    public function setCaptchaKey(?string $captchaKey): void {
+        $this->captchaKey = $captchaKey;
     }
 
 }

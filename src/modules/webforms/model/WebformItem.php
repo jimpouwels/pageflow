@@ -6,36 +6,36 @@ use Pageflow\Core\modules\templates\model\Presentable;
 
 abstract class WebformItem extends Presentable {
 
-    private string $_label = "";
-    private string $_name = "";
-    private int $_order_nr = 0;
+    private string $label = "";
+    private string $name = "";
+    private int $orderNr = 0;
 
     public function __construct(int $scopeId) {
         parent::__construct($scopeId);
     }
 
     public function getLabel(): string {
-        return $this->_label;
+        return $this->label;
     }
 
     public function setLabel(string $label): void {
-        $this->_label = $label;
+        $this->label = $label;
     }
 
     public function getName(): string {
-        return $this->_name;
+        return $this->name;
     }
 
     public function setName(string $name): void {
-        $this->_name = $name;
+        $this->name = $name;
     }
 
     public function getOrderNr(): int {
-        return $this->_order_nr;
+        return $this->orderNr;
     }
 
-    public function setOrderNr(int $order_nr): void {
-        $this->_order_nr = $order_nr;
+    public function setOrderNr(int $orderNr): void {
+        $this->orderNr = $orderNr;
     }
 
     public abstract function getType(): string;

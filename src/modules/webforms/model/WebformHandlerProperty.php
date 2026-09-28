@@ -6,14 +6,14 @@ use Pageflow\Core\core\model\Entity;
 
 class WebformHandlerProperty extends Entity {
 
-    private string $_name;
-    private ?string $_value = null;
-    private string $_type;
+    private string $name;
+    private ?string $value = null;
+    private string $type;
 
     public static function constructFromRecord(array $row): WebformHandlerProperty {
-        $webform_handler_property = new WebformHandlerProperty();
-        $webform_handler_property->initFromDb($row);
-        return $webform_handler_property;
+        $webformHandlerProperty = new WebformHandlerProperty();
+        $webformHandlerProperty->initFromDb($row);
+        return $webformHandlerProperty;
     }
 
     protected function initFromDb(array $row): void {
@@ -24,26 +24,26 @@ class WebformHandlerProperty extends Entity {
     }
 
     public function getName(): string {
-        return $this->_name;
+        return $this->name;
     }
 
     public function setName(string $name): void {
-        $this->_name = $name;
+        $this->name = $name;
     }
 
     public function getValue(): ?string {
-        return $this->_value;
+        return $this->value;
     }
 
     public function setValue(?string $value): void {
-        $this->_value = $value;
+        $this->value = $value;
     }
 
     public function getType(): string {
-        return $this->_type;
+        return $this->type;
     }
 
     public function setType(string $type): void {
-        $this->_type = $type;
+        $this->type = $type;
     }
 }

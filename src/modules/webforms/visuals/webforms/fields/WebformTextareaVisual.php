@@ -7,8 +7,8 @@ use Pageflow\Core\view\TemplateData;
 
 class WebformTextareaVisual extends WebformFieldVisual {
 
-    public function __construct(?WebFormTextArea $form_field) {
-        parent::__construct($form_field);
+    public function __construct(?WebFormTextArea $formField) {
+        parent::__construct($formField);
     }
 
     public function getFormFieldTemplate(): string {

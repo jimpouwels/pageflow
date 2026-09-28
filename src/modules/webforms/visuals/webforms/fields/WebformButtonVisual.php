@@ -7,8 +7,8 @@ use Pageflow\Core\view\TemplateData;
 
 class WebformButtonVisual extends WebformItemVisual {
 
-    public function __construct(WebformItem $webform_item) {
-        parent::__construct($webform_item);
+    public function __construct(WebformItem $webformItem) {
+        parent::__construct($webformItem);
     }
 
     public function getFormItemTemplate(): string {

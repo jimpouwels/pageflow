@@ -4,14 +4,14 @@ namespace Pageflow\Core\modules\webforms\model;
 
 abstract class WebformField extends WebformItem {
 
-    private bool $_mandatory = false;
+    private bool $mandatory = false;
 
     public function getMandatory(): bool {
-        return $this->_mandatory;
+        return $this->mandatory;
     }
 
     public function setMandatory(bool $mandatory): void {
-        $this->_mandatory = $mandatory;
+        $this->mandatory = $mandatory;
     }
 
     protected function initFromDb(array $row): void {

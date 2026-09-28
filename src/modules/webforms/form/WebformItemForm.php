@@ -7,22 +7,22 @@ use Pageflow\Core\modules\webforms\model\WebformItem;
 
 abstract class WebformItemForm extends Form {
 
-    private WebformItem $_webform_item;
+    private WebformItem $webformItem;
 
     public function __construct(WebformItem $webformButton) {
-        $this->_webform_item = $webformButton;
+        $this->webformItem = $webformButton;
     }
 
     public function loadFields(): void {
-        $this->_webform_item->setLabel($this->getMandatoryFieldValue("webform_item_{$this->_webform_item->getId()}_label"));
-        $this->_webform_item->setName($this->getMandatoryFieldValue("webform_item_{$this->_webform_item->getId()}_name"));
+        $this->webformItem->setLabel($this->getMandatoryFieldValue("webform_item_{$this->webformItem->getId()}_label"));
+        $this->webformItem->setName($this->getMandatoryFieldValue("webform_item_{$this->webformItem->getId()}_name"));
 
-        $template_id_string_val = $this->getFieldValue("webform_item_{$this->_webform_item->getId()}_template");
-        $template_id = null;
-        if (!empty($template_id_string_val)) {
-            $template_id = intval($template_id_string_val);
+        $templateIdStringValue = $this->getFieldValue("webform_item_{$this->webformItem->getId()}_template");
+        $templateId = null;
+        if (!empty($templateIdStringValue)) {
+            $templateId = intval($templateIdStringValue);
         }
-        $this->_webform_item->setTemplateId($template_id);
+        $this->webformItem->setTemplateId($templateId);
 
         $this->loadItemFields();
     }
@@ -30,6 +30,6 @@ abstract class WebformItemForm extends Form {
     public abstract function loadItemFields(): void;
 
     protected function getWebFormItem(): WebformItem {
-        return $this->_webform_item;
+        return $this->webformItem;
     }
 }

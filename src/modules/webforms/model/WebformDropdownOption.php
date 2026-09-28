@@ -6,28 +6,28 @@ use Pageflow\Core\core\model\Entity;
 
 class WebformDropdownOption extends Entity {
 
-    private string $_text;
-    private string $_name;
+    private string $text;
+    private string $name;
 
     public function __construct(string $text, string $name) {
-        $this->_text = $text;
-        $this->_name = $name;
+        $this->text = $text;
+        $this->name = $name;
     }
 
     public function getText(): string {
-        return $this->_text;
+        return $this->text;
     }
 
     public function setText(string $text): void {
-        $this->_text = $text;
+        $this->text = $text;
     }
 
     public function getName(): string {
-        return $this->_name;
+        return $this->name;
     }
 
     public function setName(string $name): void {
-        $this->_name = $name;
+        $this->name = $name;
     }
 
 }

@@ -6,7 +6,7 @@ class WebformDropdown extends WebformField {
 
     public static string $TYPE = "dropdown";
     private static int $SCOPE = 15;
-    private array $_options = array();
+    private array $options = array();
 
     public function __construct() {
         parent::__construct(self::$SCOPE);
@@ -19,15 +19,15 @@ class WebformDropdown extends WebformField {
     }
 
     public function getOptions(): array {
-        return $this->_options;
+        return $this->options;
     }
 
     public function setOptions(array $options): void {
-        $this->_options = $options;
+        $this->options = $options;
     }
 
     public function addOption(WebformDropdownOption $option) {
-        $this->_options[] = $option;
+        $this->options[] = $option;
     }
 
     public function getType(): string {

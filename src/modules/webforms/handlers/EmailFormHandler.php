@@ -10,11 +10,11 @@ use Pageflow\Core\modules\pages\model\Page;
 class EmailFormHandler extends FormHandler {
 
     public static string $TYPE = 'email_form_handler';
-    private SettingsDao $_settings_dao;
+    private SettingsDao $settingsDao;
 
     public function __construct() {
         parent::__construct();
-        $this->_settings_dao = SettingsDaoMysql::getInstance();
+        $this->settingsDao = SettingsDaoMysql::getInstance();
     }
 
     public function getRequiredProperties(): array {
