@@ -8,13 +8,9 @@ use Pageflow\Core\modules\templates\model\TemplateVariant;
 
 class TemplatePicker extends Pulldown {
 
-    public function __construct(string $name, string $label, bool $mandatory, ?string $className, ?TemplateVariant $currentTemplateVariant, Scope $scope) {
+    public function __construct(string $name, string $label, ?int $currentTemplateVariantId, bool $mandatory, ?string $className, Scope $scope) {
         $options = $this->getOptions($scope);
-        $currentTemplateId = null;
-        if (!is_null($currentTemplateVariant)) {
-            $currentTemplateId = $currentTemplateVariant->getId();
-        }
-        parent::__construct($name, $label, $currentTemplateId, $options, $mandatory, $className, true);
+        parent::__construct($name, $label, $currentTemplateVariantId, $options, $mandatory, $className, true);
     }
 
     private function getOptions(Scope $scope): array {

@@ -44,7 +44,7 @@ class MetadataEditor extends Panel {
         $publishedField = new SingleCheckbox("published", $this->getTextResource('pages_edit_metadata_ispublished_field_label'), $this->currentPage->isPublished(), false, "");
         $includeInSearchEngineField = new SingleCheckbox("include_in_search_engine", $this->getTextResource('pages_edit_metadata_include_in_search_engine_field_label'), $this->currentPage->getIncludeInSearchEngine(), false, "");
         $showInNavigationField = new SingleCheckbox("show_in_navigation", $this->getTextResource('pages_edit_metadata_showinnavigation_field_label'), $this->currentPage->getShowInNavigation(), false, "");
-        $templatePickerField = new TemplatePicker("page_template", $this->getTextResource('pages_edit_metadata_template_field_label'), false, "", $this->currentPage->getTemplate(), $this->currentPage->getScope());
+        $templatePickerField = new TemplatePicker("page_template", $this->getTextResource('pages_edit_metadata_template_field_label'), $this->currentPage->getTemplateId(), false, "", $this->currentPage->getScope());
 
         $data->assign("current_page_id", $this->currentPage->getId());
         $data->assign("element_holder_version", $this->currentPage->getVersion());

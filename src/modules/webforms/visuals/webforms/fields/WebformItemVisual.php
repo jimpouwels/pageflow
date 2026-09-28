@@ -33,7 +33,7 @@ abstract class WebformItemVisual extends Visual {
         $formItemContentTemplateData = $this->createChildData();
         $this->loadItemContent($formItemContentTemplateData);
 
-        $templatePicker = new TemplatePicker("webform_item_{$this->webformItem->getId()}_template", "", false, "template_picker", $this->getTemplateService()->getTemplateVariant($this->webformItem->getTemplateId()), $this->webformItem->getScope());
+        $templatePicker = new TemplatePicker("webform_item_{$this->webformItem->getId()}_template", "", $this->webformItem->getTemplateId(), false, "template_picker", $this->webformItem->getScope());
         $this->assign('template_picker', $templatePicker->render());
 
         $this->assign('id', $this->webformItem->getId());
