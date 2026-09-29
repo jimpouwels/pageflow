@@ -14,11 +14,13 @@ use Pageflow\Core\view\views\TextField;
 
 class TemplateEditor extends Panel {
     private TemplateDao $templateDao;
+    private ScopeDao $scopeDao;
     private Template $currentTemplate;
 
     public function __construct(Template $currentTemplate) {
         parent::__construct('template_editor_panel_title', 'template_editor_panel');
         $this->templateDao = TemplateDaoMysql::getInstance();
+        $this->scopeDao = ScopeDaoMysql::getInstance();
         $this->currentTemplate = $currentTemplate;
     }
 
