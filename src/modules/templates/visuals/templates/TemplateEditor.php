@@ -5,6 +5,9 @@ namespace Pageflow\Core\modules\templates\visuals\templates;
 use Pageflow\Core\modules\templates\dao\TemplateDao;
 use Pageflow\Core\modules\templates\dao\TemplateDaoMysql;
 use Pageflow\Core\modules\templates\model\Template;
+use Pageflow\Core\database\dao\ScopeDao;
+use Pageflow\Core\database\dao\ScopeDaoMysl;
+use Pageflow\Core\view\views\TemplatePicker;
 use Pageflow\Core\view\TemplateData;
 use Pageflow\Core\view\views\Panel;
 use Pageflow\Core\view\views\TextField;
@@ -31,6 +34,7 @@ class TemplateEditor extends Panel {
         $data->assign("name_field", $nameField->render());
         $filenameField = new TextField("template_{$id}_filename_field", $this->getTextResource("template_editor_filename_field"), $this->currentTemplate->getFileName(), false, false, null);
         $data->assign("filename_field", $filenameField->render());
+        $data->assign("scopes_field", $this->renderScopesField());
 
         $varDefFields = array();
         foreach ($this->templateDao->getTemplateVarDefs($this->currentTemplate) as $templateVarDef) {
@@ -39,6 +43,16 @@ class TemplateEditor extends Panel {
             $varDefFields[] = $varDefField->render();
         }
         $data->assign("var_defs", $varDefFields);
+    }
+
+    private function renderScopesField(): string {
+        $scopesIdentifierValuePair = array();
+        foreach ($this->scopeDao->getScopes() as $scope) {
+            $scopesIdentifierValuePair[] = array("name" => $this->getTextResource($scope->getIdentifier() . '_scope_label'), "value" => $scope->getId());
+        }
+        $currentScope = $this->templateVariant->getScope();
+        $scopesField = new Pulldown("scope", "Scope", $currentScope->getId(), $scopesIdentifierValuePair, 200, true);
+        return $scopesField->render();
     }
 
 }
