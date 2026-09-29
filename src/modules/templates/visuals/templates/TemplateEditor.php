@@ -4,9 +4,9 @@ namespace Pageflow\Core\modules\templates\visuals\templates;
 
 use Pageflow\Core\modules\templates\dao\TemplateDao;
 use Pageflow\Core\modules\templates\dao\TemplateDaoMysql;
-use Pageflow\Core\modules\templates\model\Template;
 use Pageflow\Core\database\dao\ScopeDao;
 use Pageflow\Core\database\dao\ScopeDaoMysl;
+use Pageflow\Core\modules\templates\model\Template;
 use Pageflow\Core\view\views\TemplatePicker;
 use Pageflow\Core\view\TemplateData;
 use Pageflow\Core\view\views\Panel;
