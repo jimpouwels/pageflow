@@ -11,6 +11,7 @@ class Template extends Entity {
     private ?string $fileName = null;
     private string $name;
     private ?string $code;
+    private ?int $scopeId;
     private array $templateVarDefs = array();
 
     public static function constructFromRecord(array $row): Template {
@@ -23,6 +24,7 @@ class Template extends Entity {
         $this->setFileName($row['filename']);
         $this->setName($row['name']);
         $this->setCode($row['code']);
+        $this->setScopeId($row['scope_id']);
         parent::initFromDb($row);
         $this->setTemplateVarDefs(TemplateDaoMysql::getInstance()->getTemplateVarDefs($this));
     }
@@ -70,6 +72,14 @@ class Template extends Entity {
 
     public function setCode(?string $code): void {
         $this->code = $code;
+    }
+
+    public function getScopeId(): ?int {
+        return $this->scopeId;
+    }
+
+    public function setScopeId(?int $scopeId): void {
+        $this->scopeId = $scopeId;
     }
 
     public function addTemplateVarDef(TemplateVarDef $templateVarDef): void {
