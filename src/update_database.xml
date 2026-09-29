@@ -360,6 +360,8 @@
             <query>RENAME TABLE template_files TO templates</query>
             <query>ALTER TABLE template_variants RENAME COLUMN template_file_id TO template_id</query>
             <query>ALTER TABLE template_var_defs RENAME COLUMN template_file_id TO template_id</query>
+            <query>ALTER TABLE templates ADD COLUMN scope_id int(10) unsigned DEFAULT NULL</query>
+            <query>ALTER TABLE templates ADD CONSTRAINT template_to_scope FOREIGN KEY template_to_scope (scope_id) REFERENCES scopes (id) ON DELETE SET NULL ON UPDATE CASCADE</query>
         </queries>
     </version>
 </versions>
