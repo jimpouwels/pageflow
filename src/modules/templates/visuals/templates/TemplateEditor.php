@@ -54,7 +54,7 @@ class TemplateEditor extends Panel {
             $scopesIdentifierValuePair[] = array("name" => $this->getTextResource($scope->getIdentifier() . '_scope_label'), "value" => $scope->getId());
         }
         $currentScope = $this->currentTemplate->getScopeId();
-        $scopesField = new Pulldown("scope", "Scope", $currentScope, $scopesIdentifierValuePair, false, "", true);
+        $scopesField = new Pulldown("template_{$this->currentTemplate->getId()}_scope_field", "Scope", $currentScope, $scopesIdentifierValuePair, false, "", true);
         return $scopesField->render();
     }
 

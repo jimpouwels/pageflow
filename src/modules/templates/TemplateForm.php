@@ -32,6 +32,7 @@ class TemplateForm extends Form {
         $this->template->setName($this->getMandatoryFieldValue("template_{$id}_name_field"));
         $this->template->setFileName($this->getFieldValue("template_{$id}_filename_field"));
         $this->template->setCode($this->getFieldValue("template_{$id}_code_field"));
+        $this->template->setScopeId($this->getNumber("template_{$id}_scope_field"));
 
         $this->parseVarDefs = $this->parseVarDefs();
 
@@ -44,8 +45,8 @@ class TemplateForm extends Form {
         // update template file
         foreach ($this->parseVarDefs as $parsedVarDef) {
             if (!array_filter($this->template->getTemplateVarDefs(), fn($varDef) => $varDef->getName() == $parsedVarDef)) {
-                $template_var_def = $this->templateDao->storeTemplateVarDef($this->template, $parsedVarDef);
-                $this->template->addTemplateVarDef($template_var_def);
+                $templateVarDef = $this->templateDao->storeTemplateVarDef($this->template, $parsedVarDef);
+                $this->template->addTemplateVarDef($templateVarDef);
             }
         }
         foreach ($this->template->getTemplateVarDefs() as $templateFileVarDef) {

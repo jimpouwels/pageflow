@@ -193,12 +193,13 @@ class TemplateDaoMysql implements TemplateDao {
     }
 
     public function updateTemplate(Template $template): void {
-        $statement = $this->mysqlConnector->prepareStatement("UPDATE templates SET `name` = ?, `code` = ?, `filename` = ? WHERE id = ?");
+        $statement = $this->mysqlConnector->prepareStatement("UPDATE templates SET `name` = ?, `code` = ?, `filename` = ?, `scope_id` = ? WHERE id = ?");
         $id = $template->getId();
         $name = $template->getName();
         $code = $template->getCode();
         $filename = $template->getFileName();
-        $statement->bind_param("sssi", $name, $code, $filename, $id);
+        $scopeId = $template->getScopeId();
+        $statement->bind_param("sssii", $name, $code, $filename, $scopeId, $id);
         $this->mysqlConnector->executeStatement($statement);
     }
 
