@@ -3,13 +3,11 @@
 namespace Pageflow\Core\modules\templates\model;
 
 use Pageflow\Core\core\model\Entity;
-use Pageflow\Core\database\dao\ScopeDaoMysql;
 use Pageflow\Core\modules\templates\dao\TemplateDaoMysql;
 
 class TemplateVariant extends Entity {
 
     private string $name;
-    private int $scopeId;
     private array $templateVars = array();
     private ?int $templateFileId = null;
 
@@ -21,7 +19,6 @@ class TemplateVariant extends Entity {
 
     protected function initFromDb(array $row): void {
         $this->setName($row['name']);
-        $this->setScopeId($row['scope_id']);
         $this->setTemplateId($row['template_id']);
         parent::initFromDb($row);
         $this->setTemplateVars(TemplateDaoMysql::getInstance()->getTemplateVars($this));
@@ -49,19 +46,6 @@ class TemplateVariant extends Entity {
 
     public function setTemplateId(?int $templateId): void {
         $this->templateFileId = $templateId;
-    }
-
-    public function getScope(): Scope {
-        $dao = ScopeDaoMysql::getInstance();
-        return $dao->getScope($this->scopeId);
-    }
-
-    public function getScopeId(): int {
-        return $this->scopeId;
-    }
-
-    public function setScopeId(int $scopeId): void {
-        $this->scopeId = $scopeId;
     }
 
     public function addTemplateVar(TemplateVar $templateVar): void {

@@ -20,7 +20,6 @@ class TemplateVariantEditorForm extends Form {
 
     public function loadFields(): void {
         $this->templateVariant->setName($this->getMandatoryFieldValue("name"));
-        $this->templateVariant->setScopeId($this->getMandatoryFieldValue("scope"));
 
         $newTemplateId = $this->getFieldValue("template_variant_editor_template");
         if ($newTemplateId != $this->templateVariant->getTemplateId()) {

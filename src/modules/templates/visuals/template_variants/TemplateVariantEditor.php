@@ -59,8 +59,8 @@ class TemplateVariantEditor extends Panel {
         foreach ($this->scopeDao->getScopes() as $scope) {
             $scopesIdentifierValuePair[] = array("name" => $this->getTextResource($scope->getIdentifier() . '_scope_label'), "value" => $scope->getId());
         }
-        $currentScope = $this->templateVariant->getScope();
-        $scopesField = new Pulldown("scope", "Scope", $currentScope->getId(), $scopesIdentifierValuePair, 200, true);
+        $currentScopeId = $this->templateService->getTemplateForTemplateVariant($this->templateVariant)->getScopeId();
+        $scopesField = new Pulldown("scope", "Scope", $currentScopeId, $scopesIdentifierValuePair, 200, true);
         return $scopesField->render();
     }
 

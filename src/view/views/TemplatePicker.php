@@ -2,22 +2,28 @@
 
 namespace Pageflow\Core\view\views;
 
-use Pageflow\Core\modules\templates\dao\TemplateDaoMysql;
+use Pageflow\Core\modules\templates\service\TemplateInteractor;
+use Pageflow\Core\modules\templates\service\TemplateService;
 use Pageflow\Core\modules\templates\model\Scope;
-use Pageflow\Core\modules\templates\model\TemplateVariant;
 
 class TemplatePicker extends Pulldown {
 
+    private TemplateService $templateService;
+
     public function __construct(string $name, string $label, ?int $currentTemplateVariantId, bool $mandatory, ?string $className, Scope $scope) {
+        $this->templateService = TemplateInteractor::getInstance();
         $options = $this->getOptions($scope);
         parent::__construct($name, $label, $currentTemplateVariantId, $options, $mandatory, $className, true);
     }
 
     private function getOptions(Scope $scope): array {
-        $templateDao = TemplateDaoMysql::getInstance();
         $options = array();
-        foreach ($templateDao->getTemplateVariantsByScope($scope) as $template) {
-            $options[] = array('name' => $template->getName(), 'value' => $template->getId());
+        $templates = $this->templateService->getTemplatesByScope($scope);
+        foreach ($templates as $template) {
+            $templateVariants = $this->templateService->getTemplateVariantsForTemplate($template);
+            foreach ($templateVariants as $templateVariant) {
+                $options[] = array('name' => $templateVariant->getName(), 'value' => $templateVariant->getId());
+            }
         }
         return $options;
     }

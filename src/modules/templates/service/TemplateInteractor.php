@@ -6,7 +6,8 @@ namespace Pageflow\Core\modules\templates\service;
 use Pageflow\Core\modules\templates\dao\TemplateDao;
 use Pageflow\Core\modules\templates\dao\TemplateDaoMysql;
 use Pageflow\Core\modules\templates\model\TemplateVariant;
-use Pageflow\Core\modules\templates\model\Template; 
+use Pageflow\Core\modules\templates\model\Template;
+use Pageflow\Core\modules\templates\model\Scope;
 use Pageflow\Core\modules\templates\model\TemplateVar;
 use Pageflow\Core\modules\templates\model\TemplateVarDef;
 use Pageflow\Core\modules\templates\model\Presentable;
@@ -31,7 +32,8 @@ class TemplateInteractor implements TemplateService {
 
     public function getTemplateForPresentable(Presentable $presentable): ?Template {
         $templateVariant = $this->templateDao->getTemplateVariant($presentable->getTemplateId());
-        return $templateVariant ? $this->templateDao->getTemplate($templateVariant->getTemplateId()) : null;
+        $templateId = $templateVariant?->getTemplateId();
+        return $templateId ? $this->templateDao->getTemplate($templateId) : null;
     }
 
     public function getTemplateVarDefByTemplateVar(TemplateVariant $template, TemplateVar $templateVar): TemplateVarDef {
@@ -41,15 +43,21 @@ class TemplateInteractor implements TemplateService {
     }
 
     public function getTemplateVarDefsByTemplate(TemplateVariant $template): array {
-        return $this->templateDao->getTemplateVarDefs($this->getTemplateForTemplateVariant($template));
+        $templateFile = $this->getTemplateForTemplateVariant($template);
+        return $templateFile ? $this->templateDao->getTemplateVarDefs($templateFile) : [];
     }
 
-    public function getTemplateForTemplateVariant(TemplateVariant $templateVariant): Template {
-        return $this->templateDao->getTemplate($templateVariant->getTemplateId());
+    public function getTemplateForTemplateVariant(TemplateVariant $templateVariant): ?Template {
+        $templateId = $templateVariant->getTemplateId();
+        return $templateId ? $this->templateDao->getTemplate($templateId) : null;
     }
 
     public function getTemplates(): array {
         return $this->templateDao->getTemplates();
+    }
+
+    public function getTemplatesByScope(Scope $scope): array {
+        return array_filter($this->getTemplates(), fn($template) => $template->getScopeId() == $scope->getId());
     }
 
     public function getTemplateVariant(?int $templateVariantId): ?TemplateVariant {
@@ -57,5 +65,9 @@ class TemplateInteractor implements TemplateService {
             return null;
         }
         return $this->templateDao->getTemplateVariant($templateVariantId);
+    }
+
+    public function getTemplateVariantsForTemplate(Template $template): array {
+        return $this->templateDao->getTemplateVariantsForTemplate($template);
     }
 }

@@ -34,12 +34,16 @@ class TemplateVariantsList extends Panel {
 
     private function getTemplateVariantsForScope(Scope $scope): array {
         $templatesData = array();
-        foreach ($this->templateDao->getTemplateVariantsByScope($scope) as $templateVariant) {
-            $templateData = array();
-            $templateData["id"] = $templateVariant->getId();
-            $templateData["name"] = $templateVariant->getName();
-            $templateData["delete_checkbox"] = $this->renderDeleteCheckBox($templateVariant);
-            $templatesData[] = $templateData;
+        $templates = $this->getTemplateService()->getTemplatesByScope($scope);
+
+        foreach ($templates as $template) {
+            foreach ($this->getTemplateService()->getTemplateVariantsForTemplate($template) as $templateVariant) {
+                $templateData = array();
+                $templateData["id"] = $templateVariant->getId();
+                $templateData["name"] = $templateVariant->getName();
+                $templateData["delete_checkbox"] = $this->renderDeleteCheckBox($templateVariant);
+                $templatesData[] = $templateData;
+            }
         }
         return $templatesData;
     }

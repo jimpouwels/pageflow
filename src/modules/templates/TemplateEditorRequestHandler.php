@@ -10,6 +10,8 @@ use Pageflow\Core\modules\templates\dao\TemplateDaoMysql;
 use Pageflow\Core\modules\templates\model\Scope;
 use Pageflow\Core\modules\templates\model\TemplateVariant;
 use Pageflow\Core\request_handlers\HttpRequestHandler;
+use Pageflow\Core\modules\templates\service\TemplateInteractor;
+use Pageflow\Core\modules\templates\service\TemplateService;
 
 class TemplateEditorRequestHandler extends HttpRequestHandler {
 
@@ -18,6 +20,7 @@ class TemplateEditorRequestHandler extends HttpRequestHandler {
     private static string $TEMPLATE_VARIANT_ID_POST = "template_variant_id";
 
     private TemplateDao $templateDao;
+    private TemplateService $templateService;
     private ScopeDao $scopeDao;
     private ?TemplateVariant $currentTemplateVariant = null;
     private ?Scope $currentScope = null;
@@ -25,6 +28,7 @@ class TemplateEditorRequestHandler extends HttpRequestHandler {
     public function __construct() {
         $this->templateDao = TemplateDaoMysql::getInstance();
         $this->scopeDao = ScopeDaoMysql::getInstance();
+        $this->templateService = TemplateInteractor::getInstance();
     }
 
     public function handleGet(): void {
@@ -96,7 +100,7 @@ class TemplateEditorRequestHandler extends HttpRequestHandler {
     private function resolveScope(): ?Scope {
         $scope = $this->getScopeFromGetRequest();
         if (is_null($scope) && !is_null($this->currentTemplateVariant)) {
-            $scope = $this->scopeDao->getScope($this->currentTemplateVariant->getScopeId());
+            $scope = $this->scopeDao->getScope($this->templateService->getTemplateForTemplateVariant($this->currentTemplateVariant)->getScopeId());
         }
         return $scope;
     }

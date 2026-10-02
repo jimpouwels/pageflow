@@ -62,28 +62,25 @@ class TemplateDaoMysql implements TemplateDao {
 
     public function createTemplateVariant(): TemplateVariant {
         $newTemplateVariant = new TemplateVariant();
-        $newTemplateVariant->setScopeId(1);
         $newTemplateVariant->setName("Nieuw template");
         $this->persistTemplateVariant($newTemplateVariant);
         return $newTemplateVariant;
     }
 
     public function persistTemplateVariant(TemplateVariant $newTemplateVariant): void {
-        $statement = $this->mysqlConnector->prepareStatement("INSERT INTO template_variants (scope_id, `name`) VALUES (?, ?)");
-        $scopeId = $newTemplateVariant->getScopeId();
+        $statement = $this->mysqlConnector->prepareStatement("INSERT INTO template_variants (`name`) VALUES (?)");
         $name = $newTemplateVariant->getName();
-        $statement->bind_param("is", $scopeId, $name);
+        $statement->bind_param("s", $name);
         $this->mysqlConnector->executeStatement($statement);
         $newTemplateVariant->setId($this->mysqlConnector->getInsertId());
     }
 
     public function updateTemplateVariant(TemplateVariant $templateVariant): void {
-        $statement = $this->mysqlConnector->prepareStatement("UPDATE template_variants SET `name` = ?, template_id = ?, scope_id = ? WHERE id = ?");
+        $statement = $this->mysqlConnector->prepareStatement("UPDATE template_variants SET `name` = ?, template_id = ? WHERE id = ?");
         $templateId = $templateVariant->getId();
         $name = $templateVariant->getName();
         $templateFileId = $templateVariant->getTemplateId();
-        $scopeId = $templateVariant->getScopeId();
-        $statement->bind_param("siii", $name, $templateFileId, $scopeId, $templateId);
+        $statement->bind_param("sii", $name, $templateFileId, $templateId);
         $this->mysqlConnector->executeStatement($statement);
     }
 
