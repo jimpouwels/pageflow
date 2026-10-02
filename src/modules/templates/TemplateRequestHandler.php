@@ -85,14 +85,14 @@ class TemplateRequestHandler extends HttpRequestHandler {
 
     private function getTemplateFromGetRequest(): ?Template {
         $template = null;
-        if (isset($_GET[self::$TEMPLATE_ID_GET])) {
-            $template = $this->templateDao->getTemplate($_GET[self::$TEMPLATE_ID_GET]);
+        if (!empty($_GET[self::$TEMPLATE_ID_GET])) {
+            $template = $this->templateDao->getTemplate(intval($_GET[self::$TEMPLATE_ID_GET]));
         }
         return $template;
     }
 
     private function isCurrentTemplateShown(): bool {
-        return isset($_GET[self::$TEMPLATE_ID_GET]);
+        return !empty($_GET[self::$TEMPLATE_ID_GET]);
     }
 
     private function isUpdateAction(): bool {

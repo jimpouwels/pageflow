@@ -17,6 +17,7 @@ class TemplateEditorRequestHandler extends HttpRequestHandler {
 
     private static string $TEMPLATE_VARIANT_ID_GET = "template_variant";
     private static string $SCOPE_IDENTIFIER_GET = "scope";
+    private static string $UNASSIGNED_GET = "unassigned";
     private static string $TEMPLATE_VARIANT_ID_POST = "template_variant_id";
 
     private TemplateDao $templateDao;
@@ -24,6 +25,7 @@ class TemplateEditorRequestHandler extends HttpRequestHandler {
     private ScopeDao $scopeDao;
     private ?TemplateVariant $currentTemplateVariant = null;
     private ?Scope $currentScope = null;
+    private bool $showUnassigned = false;
 
     public function __construct() {
         $this->templateDao = TemplateDaoMysql::getInstance();
@@ -35,6 +37,7 @@ class TemplateEditorRequestHandler extends HttpRequestHandler {
         if ($this->isCurrentTemplateVariantShown()) {
             $this->currentTemplateVariant = $this->getTemplateVariantFromGetRequest();
         }
+        $this->showUnassigned = isset($_GET[self::$UNASSIGNED_GET]);
         $this->currentScope = $this->resolveScope();
     }
 
@@ -58,10 +61,14 @@ class TemplateEditorRequestHandler extends HttpRequestHandler {
         return $this->currentScope;
     }
 
+    public function getShowUnassigned(): bool {
+        return $this->showUnassigned;
+    }
+
     private function addTemplateVariant(): void {
         $newTemplate = $this->templateDao->createTemplateVariant();
         $this->sendSuccessMessage("Template succesvol aangemaakt");
-        $this->redirectTo($this->getBackendBaseUrl() . "&template=" . $newTemplate->getId());
+        $this->redirectTo($this->getBackendBaseUrl() . "&" . self::$TEMPLATE_VARIANT_ID_GET . "=" . $newTemplate->getId());
     }
 
     private function deleteTemplateVariants(): void {
@@ -98,9 +105,15 @@ class TemplateEditorRequestHandler extends HttpRequestHandler {
     }
 
     private function resolveScope(): ?Scope {
+        if ($this->showUnassigned) {
+            return null;
+        }
         $scope = $this->getScopeFromGetRequest();
         if (is_null($scope) && !is_null($this->currentTemplateVariant)) {
-            $scope = $this->scopeDao->getScope($this->templateService->getTemplateForTemplateVariant($this->currentTemplateVariant)->getScopeId());
+            $templateFile = $this->templateService->getTemplateForTemplateVariant($this->currentTemplateVariant);
+            if ($templateFile) {
+                $scope = $this->scopeDao->getScope($templateFile->getScopeId());
+            }
         }
         return $scope;
     }

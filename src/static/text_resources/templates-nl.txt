@@ -2,6 +2,7 @@
 templates_module_title: Templates
 templates_scope_list_title: Componenten
 templates_back_to_list: Terug naar lijst
+templates_unassigned_scope_label: Niet-toegewezen
 
 # TAB
 templates_tab_menu_template_variants: Templatevarianten

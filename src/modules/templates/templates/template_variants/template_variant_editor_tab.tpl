@@ -1,5 +1,5 @@
 <form id="template_variant_editor_form" name="template_variant_editor_form" method="post"
-      action="{$backend_base_url}&template={$current_template_variant_id}" enctype="multipart/form-data">
+      action="{$backend_base_url}&template_variant={$current_template_variant_id}" enctype="multipart/form-data">
     <input type="hidden" name="action" id="action" value="update_template_variant" />
     <input type="hidden" name="template_variant_id" id="template_variant_id" value="{$current_template_variant_id}" />
     <div class="content_left_column">

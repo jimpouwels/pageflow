@@ -25,4 +25,6 @@ interface TemplateService {
     public function getTemplateVariant(?int $templateVariantId): ?TemplateVariant;
 
     public function getTemplateVariantsForTemplate(Template $template): array;
+
+    public function getUnassignedTemplateVariants(): array;
 }

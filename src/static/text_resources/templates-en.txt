@@ -2,6 +2,7 @@
 templates_module_title: Templates
 templates_scope_list_title: Components
 templates_back_to_list: Back to list
+templates_unassigned_scope_label: Unassigned
 
 # TAB
 templates_tab_menu_template_variants: Template variants

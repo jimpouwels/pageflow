@@ -37,7 +37,7 @@ class TemplateModuleVisual extends ModuleVisual {
 
     public function load(): void {
         if ($this->getCurrentTabId() == self::$TEMPLATES_VARIANTS_TAB) {
-            $content = new TemplateVariantEditorTab($this->currentTemplateVariant, $this->currentScope);
+            $content = new TemplateVariantEditorTab($this->currentTemplateVariant, $this->currentScope, $this->templateEditorRequestHandler->getShowUnassigned());
         } else {
             $content = new TemplatesTab($this->templateRequestHandler);
         }
@@ -51,7 +51,7 @@ class TemplateModuleVisual extends ModuleVisual {
                 $actionButtons[] = new ActionButtonSave('update_template_variant');
             }
             $actionButtons[] = new ActionButtonAdd('add_template_variant');
-            if ($this->currentScope) {
+            if ($this->currentTemplateVariant) {
                 $actionButtons[] = new ActionButtonDelete('delete_template_variant');
             }
         } else if ($this->getCurrentTabId() == self::$TEMPLATE_TAB) {

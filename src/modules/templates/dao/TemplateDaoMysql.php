@@ -38,7 +38,7 @@ class TemplateDaoMysql implements TemplateDao {
     public function getTemplateVariantsByScope(Scope $scope): array {
         $templates = array();
         if ($scope != "") {
-            $statement = $this->mysqlConnector->prepareStatement("SELECT * FROM template_variants WHERE scope_id = ? ORDER BY NAME ASC");
+            $statement = $this->mysqlConnector->prepareStatement("SELECT tv.* FROM template_variants tv JOIN templates t ON tv.template_id = t.id WHERE t.scope_id = ? ORDER BY tv.name ASC");
             $scopeId = $scope->getId();
             $statement->bind_param("i", $scopeId);
             $result = $this->mysqlConnector->executeStatement($statement);
@@ -47,6 +47,16 @@ class TemplateDaoMysql implements TemplateDao {
             }
         }
 
+        return $templates;
+    }
+
+    public function getUnassignedTemplateVariants(): array {
+        $statement = $this->mysqlConnector->prepareStatement("SELECT * FROM template_variants WHERE template_id IS NULL ORDER BY name ASC");
+        $result = $this->mysqlConnector->executeStatement($statement);
+        $templates = array();
+        while ($row = $result->fetch_assoc()) {
+            $templates[] = TemplateVariant::constructFromRecord($row);
+        }
         return $templates;
     }
 

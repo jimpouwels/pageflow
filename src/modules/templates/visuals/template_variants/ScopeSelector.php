@@ -12,11 +12,13 @@ class ScopeSelector extends Panel {
 
     private ScopeDao $scopeDao;
     private ?Scope $currentScope;
+    private bool $showingUnassigned;
 
-    public function __construct(?Scope $currentScope = null) {
+    public function __construct(?Scope $currentScope = null, bool $showingUnassigned = false) {
         parent::__construct('templates_scope_list_title', 'scope_selector_panel');
         $this->scopeDao = ScopeDaoMysql::getInstance();
         $this->currentScope = $currentScope;
+        $this->showingUnassigned = $showingUnassigned;
     }
 
     public function getPanelContentTemplate(): string {
@@ -25,6 +27,7 @@ class ScopeSelector extends Panel {
 
     public function loadPanelContent(TemplateData $data): void {
         $data->assign("scopes", $this->getAllScopes());
+        $data->assign("showing_unassigned", $this->showingUnassigned);
     }
 
     private function getAllScopes(): array {

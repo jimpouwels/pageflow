@@ -70,4 +70,8 @@ class TemplateInteractor implements TemplateService {
     public function getTemplateVariantsForTemplate(Template $template): array {
         return $this->templateDao->getTemplateVariantsForTemplate($template);
     }
+
+    public function getUnassignedTemplateVariants(): array {
+        return $this->templateDao->getUnassignedTemplateVariants();
+    }
 }

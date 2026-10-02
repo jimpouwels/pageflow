@@ -13,6 +13,8 @@ interface TemplateDao {
 
     public function getTemplateVariantsByScope(Scope $scope): array;
 
+    public function getUnassignedTemplateVariants(): array;
+
     public function getTemplateVariants(): array;
 
     public function createTemplateVariant(): TemplateVariant;

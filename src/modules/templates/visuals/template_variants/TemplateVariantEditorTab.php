@@ -5,16 +5,22 @@ namespace Pageflow\Core\modules\templates\visuals\template_variants;
 use Pageflow\Core\modules\templates\model\Scope;
 use Pageflow\Core\modules\templates\model\TemplateVariant;
 use Pageflow\Core\view\views\Visual;
+use Pageflow\Core\database\dao\ScopeDao;
+use Pageflow\Core\database\dao\ScopeDaoMysql;
 
 class TemplateVariantEditorTab extends Visual {
 
     private ?TemplateVariant $currentTemplateVariant;
     private ?Scope $currentScope;
+    private ScopeDao $scopeDao;
+    private bool $showUnassigned;
 
-    public function __construct(?TemplateVariant $currentTemplateVariant, ?Scope $currentScope) {
+    public function __construct(?TemplateVariant $currentTemplateVariant, ?Scope $currentScope, bool $showUnassigned = false) {
         parent::__construct();
         $this->currentTemplateVariant = $currentTemplateVariant;
         $this->currentScope = $currentScope;
+        $this->scopeDao = ScopeDaoMysql::getInstance();
+        $this->showUnassigned = $showUnassigned;
     }
 
     public function getTemplateFilename(): string {
@@ -31,13 +37,24 @@ class TemplateVariantEditorTab extends Visual {
             }
         }
         $this->assign("scope_selector", $this->getScopeSelector());
-        if (!is_null($this->currentScope)) {
-            $this->assign("template_variant_list", $this->renderTemplateVariantsList());
+        if ($this->showUnassigned) {
+            $this->assign("template_variant_list", $this->renderTemplateVariantsList(null));
+        } else if (!is_null($this->currentScope)) {
+            $this->assign("template_variant_list", $this->renderTemplateVariantsList($this->currentScope));
         }
     }
 
     private function getScopeSelector(): string {
-        return (new ScopeSelector($this->currentScope))->render();
+        $currentScope = $this->currentScope;
+        if (!$currentScope) {
+            if ($this->currentTemplateVariant) {
+                $template = $this->getTemplateService()->getTemplateForTemplateVariant($this->currentTemplateVariant);
+                if ($template) {
+                    $currentScope = $this->scopeDao->getScope($template->getScopeId());
+                }
+            }
+        }
+        return (new ScopeSelector($currentScope, $this->showUnassigned))->render();
     }
 
     private function renderTemplateEditor(): string {
@@ -48,8 +65,8 @@ class TemplateVariantEditorTab extends Visual {
         return (new TemplateVarEditor($this->currentTemplateVariant))->render();
     }
 
-    private function renderTemplateVariantsList(): string {
-        return (new TemplateVariantsList($this->currentScope))->render();
+    private function renderTemplateVariantsList(?Scope $scope): string {
+        return (new TemplateVariantsList($scope))->render();
     }
 
     private function getCurrentTemplateId(): ?int {

@@ -37,7 +37,6 @@ class TemplateVariantEditor extends Panel {
     private function assignEditFields(TemplateData $data): void {
         $name_field = new TextField("name", "template_variant_editor_name_field", $this->templateVariant->getName(), true, false, null);
         $data->assign("name_field", $name_field->render());
-        $data->assign("scopes_field", $this->renderScopesField());
 
         $templateFileSelect = new Pulldown("template_variant_editor_template", $this->getTextResource('template_variant_editor_template_field'), strval($this->templateVariant->getTemplateId()), $this->getTemplateFilesData(), false, null, true);
         $data->assign("template_selector", $templateFileSelect->render());
@@ -52,16 +51,6 @@ class TemplateVariantEditor extends Panel {
             $templateFilesData[] = $templateFileData;
         }
         return $templateFilesData;
-    }
-
-    private function renderScopesField(): string {
-        $scopesIdentifierValuePair = array();
-        foreach ($this->scopeDao->getScopes() as $scope) {
-            $scopesIdentifierValuePair[] = array("name" => $this->getTextResource($scope->getIdentifier() . '_scope_label'), "value" => $scope->getId());
-        }
-        $currentScopeId = $this->templateService->getTemplateForTemplateVariant($this->templateVariant)->getScopeId();
-        $scopesField = new Pulldown("scope", "Scope", $currentScopeId, $scopesIdentifierValuePair, 200, true);
-        return $scopesField->render();
     }
 
 }
