@@ -37,12 +37,9 @@ class TemplateVariantsList extends Panel {
 
     private function getTemplateVariantsForScope(Scope $scope): array {
         $templatesData = array();
-        $templates = $this->getTemplateService()->getTemplatesByScope($scope);
 
-        foreach ($templates as $template) {
-            foreach ($this->getTemplateService()->getTemplateVariantsForTemplate($template) as $templateVariant) {
-                $templatesData[] = $this->toTemplateData($templateVariant);
-            }
+        foreach ($this->getTemplateService()->getTemplateVariantsForScope($scope) as $templateVariant) {
+            $templatesData[] = $this->toTemplateData($templateVariant);
         }
         return $templatesData;
     }
