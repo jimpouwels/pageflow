@@ -7,6 +7,7 @@
 <div class="selected_webforms">
     {foreach from=$selected_handlers item=handler}
         <div class="draggable_wrapper">
+            <span class="draggable_id_holder displaynone">{$handler.id}</span>
             <div class="draggable_header">
                 <div class="draggable_header_left">
                     {$text_resources[$handler.name_resource_identifier]}

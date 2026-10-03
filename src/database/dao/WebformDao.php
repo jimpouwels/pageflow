@@ -35,6 +35,8 @@ interface WebformDao {
 
     public function deleteWebFormHandler(WebForm $webform, int $webformHandlerId): void;
 
+    public function updateWebFormHandlerOrder(int $webformHandlerId, int $orderNr): void;
+
     public function storeProperty(int $handler_id, WebformHandlerProperty $property): void;
 
     public function deleteProperty(WebformHandlerProperty $webFormHandlerProperty): void;

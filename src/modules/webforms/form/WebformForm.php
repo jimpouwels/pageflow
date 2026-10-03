@@ -69,6 +69,17 @@ class WebformForm extends Form {
             $property->setValue($this->getMandatoryFieldValue("handler_property_{$property->getId()}_field"));
         }
 
+        $handlerOrder = $this->getFieldValue('webform_handlers_order');
+        if ($handlerOrder) {
+            $handlerOrderArray = explode(',', $handlerOrder);
+            foreach ($this->webformDao->getWebFormHandlersFor($this->webform) as $handlerInstance) {
+                $orderNr = array_search($handlerInstance->getId(), $handlerOrderArray);
+                if ($orderNr !== false) {
+                    $this->webformDao->updateWebFormHandlerOrder($handlerInstance->getId(), $orderNr);
+                }
+            }
+        }
+
         if ($this->hasErrors()) {
             throw new FormException();
         }

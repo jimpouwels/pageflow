@@ -363,6 +363,7 @@
             <query>ALTER TABLE templates ADD COLUMN scope_id int(10) unsigned DEFAULT NULL</query>
             <query>ALTER TABLE templates ADD CONSTRAINT template_to_scope FOREIGN KEY template_to_scope (scope_id) REFERENCES scopes (id) ON DELETE SET NULL ON UPDATE CASCADE</query>
             <query>ALTER TABLE template_variants DROP COLUMN scope_id</query>
+            <query>ALTER TABLE webforms_handlers ADD COLUMN order_nr int(10) DEFAULT 9999</query>
         </queries>
     </version>
 </versions>

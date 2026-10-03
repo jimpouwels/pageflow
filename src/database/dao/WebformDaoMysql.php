@@ -180,7 +180,7 @@ class WebformDaoMysql implements WebformDao {
     }
 
     public function getWebFormHandlersFor(WebForm $webform): array {
-        $query = 'SELECT * FROM webforms_handlers WHERE webform_id = ?';
+        $query = 'SELECT * FROM webforms_handlers WHERE webform_id = ? ORDER BY order_nr ASC';
         $statement = $this->mysqlConnector->prepareStatement($query);
         $webformId = $webform->getId();
         $statement->bind_param('i', $webformId);
@@ -199,6 +199,13 @@ class WebformDaoMysql implements WebformDao {
         $statement = $this->mysqlConnector->prepareStatement($query);
         $webformId = $webform->getId();
         $statement->bind_param('ii', $webformId, $webformHandlerId);
+        $this->mysqlConnector->executeStatement($statement);
+    }
+
+    public function updateWebFormHandlerOrder(int $webformHandlerId, int $orderNr): void {
+        $query = 'UPDATE webforms_handlers SET order_nr = ? WHERE id = ?';
+        $statement = $this->mysqlConnector->prepareStatement($query);
+        $statement->bind_param('ii', $orderNr, $webformHandlerId);
         $this->mysqlConnector->executeStatement($statement);
     }
 

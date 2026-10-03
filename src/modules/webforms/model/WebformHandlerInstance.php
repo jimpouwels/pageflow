@@ -9,6 +9,7 @@ class WebformHandlerInstance extends Entity {
 
     private string $type;
     private array $properties;
+    private int $orderNr = 0;
 
     public function setType(string $type): void {
         $this->type = $type;
@@ -16,6 +17,14 @@ class WebformHandlerInstance extends Entity {
 
     public function getType(): string {
         return $this->type;
+    }
+
+    public function getOrderNr(): int {
+        return $this->orderNr;
+    }
+
+    public function setOrderNr(int $orderNr): void {
+        $this->orderNr = $orderNr;
     }
 
     public function setProperties(array $properties): void {
@@ -39,6 +48,7 @@ class WebformHandlerInstance extends Entity {
 
     protected function initFromDb(array $row): void {
         $this->setType($row['type']);
+        $this->setOrderNr($row['order_nr'] ?? 0);
         parent::initFromDb($row);
     }
 }
