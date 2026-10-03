@@ -2,6 +2,7 @@
 
 namespace Pageflow\Core\view\views;
 
+use Pageflow\Core\core\BlackBoard;
 use Pageflow\Core\core\model\ModuleGroup;
 
 class NavigationMenu extends Visual {
@@ -43,7 +44,7 @@ class NavigationMenu extends Visual {
             $subItem = array();
             $subItem["title"] = $this->getTextResource($module->getIdentifier() . '_module_title');
             $subItem["id"] = $module->getId();
-            $subItem["icon_url"] = '/admin?file=/modules/' . $module->getIdentifier() . '/img/' . $module->getIdentifier() . '.png';
+            $subItem["icon_url"] = BlackBoard::getModuleIconUrl($module->getIdentifier());
             $subItem["last"] = ($count == count($modules));
             $subItem["active"] = ($module->getId() == $this->activeModuleId);
             $count++;

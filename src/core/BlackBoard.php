@@ -2,6 +2,8 @@
 
 namespace Pageflow\Core\core;
 
+use const Pageflow\CMS_ROOT;
+
 class BlackBoard {
 
     static ?int $MODULE_ID = null;
@@ -37,6 +39,11 @@ class BlackBoard {
 
     public static function getElementFileUrl(string $elementIdentifier, string $filePath): string {
         return '/admin?file=' . urlencode($filePath) . '&element=' . urlencode($elementIdentifier);
+    }
+
+    public static function getModuleIconUrl(string $moduleIdentifier): string {
+        $extension = file_exists(CMS_ROOT . '/modules/' . $moduleIdentifier . '/static/img/' . $moduleIdentifier . '.svg') ? 'svg' : 'png';
+        return '/admin?file=/modules/' . $moduleIdentifier . '/img/' . $moduleIdentifier . '.' . $extension;
     }
 
 }

@@ -47,6 +47,8 @@ class StaticsRequestHandler extends HttpRequestHandler {
             header("Content-Type: image/gif");
         } else if ($extension == "png") {
             header("Content-Type: img/png");
+        } else if ($extension == "svg") {
+            header("Content-Type: image/svg+xml");
         } else if ($extension == "css") {
             header("Content-Type: text/css");
         } else if ($extension == "js") {
