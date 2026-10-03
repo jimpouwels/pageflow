@@ -1,6 +1,6 @@
 <?php
 
-namespace Pageflow\Core\modules\sitewide_pages\persistence;
+namespace Pageflow\Core\modules\sitewide_pages\dao;
 
 interface SitewideDao {
     public function getSitewidePages(): array;

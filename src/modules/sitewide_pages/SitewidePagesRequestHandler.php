@@ -27,10 +27,8 @@ class SitewidePagesRequestHandler extends HttpRequestHandler {
         if ($this->getAction() == "remove_sitewide_pages") {
             $this->deleteSitewidePages();
         }
-        if ($this->getAction() == "move_up") {
-            $this->moveUp($this->sitewidePagesForm->getMovePage());
-        } else if ($this->getAction() == "move_down") {
-            $this->moveDown($this->sitewidePagesForm->getMovePage());
+        if ($this->getAction() == "reorder_sitewide_pages") {
+            $this->reorderSitewidePages($this->sitewidePagesForm->getOrderedPageIds());
         }
     }
 
@@ -44,27 +42,15 @@ class SitewidePagesRequestHandler extends HttpRequestHandler {
         return $_POST["action"] ?? "";
     }
 
-    private function moveUp(int $id): void {
-        $pages = $this->pageService->getSitewidePages();
-        for ($i = 0; $i < count($pages); $i++) {
-            if ($pages[$i]->getId() == $id) {
-                $tmp = $pages[$i - 1];
-                $pages[$i - 1] = $pages[$i];
-                $pages[$i] = $tmp;
-                break;
-            }
+    private function reorderSitewidePages(array $orderedPageIds): void {
+        $pagesById = array();
+        foreach ($this->pageService->getSitewidePages() as $page) {
+            $pagesById[$page->getId()] = $page;
         }
-        $this->pageService->updateSitewidePages($pages);
-    }
-
-    private function moveDown(int $id): void {
-        $pages = $this->pageService->getSitewidePages();
-        for ($i = 0; $i < count($pages); $i++) {
-            if ($pages[$i]->getId() == $id) {
-                $tmp = $pages[$i + 1];
-                $pages[$i + 1] = $pages[$i];
-                $pages[$i] = $tmp;
-                break;
+        $pages = array();
+        foreach ($orderedPageIds as $pageId) {
+            if (isset($pagesById[$pageId])) {
+                $pages[] = $pagesById[$pageId];
             }
         }
         $this->pageService->updateSitewidePages($pages);

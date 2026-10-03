@@ -1,6 +1,6 @@
 <?php
 
-namespace Pageflow\Core\modules\sitewide_pages\persistence;
+namespace Pageflow\Core\modules\sitewide_pages\dao;
 
 use Pageflow\Core\database\MysqlConnector;
 

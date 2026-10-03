@@ -9,8 +9,8 @@ use Pageflow\Core\database\dao\BlockDaoMysql;
 use Pageflow\Core\database\dao\PageDao;
 use Pageflow\Core\database\dao\PageDaoMysql;
 use Pageflow\Core\modules\pages\model\Page;
-use Pageflow\Core\modules\sitewide_pages\persistence\SitewideDao;
-use Pageflow\Core\modules\sitewide_pages\persistence\SitewideDaoMysql;
+use Pageflow\Core\modules\sitewide_pages\dao\SitewideDao;
+use Pageflow\Core\modules\sitewide_pages\dao\SitewideDaoMysql;
 
 class PageInteractor implements PageService {
 

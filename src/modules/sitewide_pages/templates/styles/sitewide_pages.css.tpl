@@ -2,16 +2,30 @@
     margin-bottom: 20px;
 }
 
-.sitewide_page_move_cell img {
-    width: 20px;
-}
-
-.sitewide_page_move_cell {
+.sitewide_page_drag_handle {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 3px;
+    cursor: grab;
     text-align: center;
 }
 
-.sitewide_page_move_down_cell img {
-    transform: scaleY(-1);
+.sitewide_page_drag_handle:active {
+    cursor: grabbing;
+}
+
+.sitewide_page_drag_handle span {
+    display: block;
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: var(--color-gray-400, #9ca3af);
+}
+
+.sitewide_page_sortable_row_active {
+    box-shadow: 0 10px 24px rgba(15, 23, 42, 0.14);
 }
 
 .sitewide_pages_fieldset {

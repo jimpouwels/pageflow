@@ -3,15 +3,13 @@
 namespace Pageflow\Core\modules\sitewide_pages;
 
 use Pageflow\Core\core\form\Form;
-use Pageflow\Core\database\dao\ArticleDao;
-use Pageflow\Core\database\dao\ArticleDaoMysql;
 use Pageflow\Core\modules\pages\service\PageInteractor;
 use Pageflow\Core\modules\pages\service\PageService;
 
 class SitewidePagesForm extends Form {
 
     private ?int $sitewidePageToAdd;
-    private ?int $movePage;
+    private array $orderedPageIds = array();
     private array $sitewidePagesToDelete = array();
     private PageService $pageService;
 
@@ -21,7 +19,7 @@ class SitewidePagesForm extends Form {
 
     public function loadFields(): void {
         $this->sitewidePageToAdd = $this->getNumber("add_sitewide_page_ref");
-        $this->movePage = $this->getNumber("moveSitewidePage");
+        $this->loadOrderedPageIds();
         $this->loadSitewidePagesToDelete();
     }
 
@@ -33,8 +31,15 @@ class SitewidePagesForm extends Form {
         return $this->sitewidePagesToDelete;
     }
 
-    public function getMovePage(): ?int {
-        return $this->movePage;
+    public function getOrderedPageIds(): array {
+        return $this->orderedPageIds;
+    }
+
+    private function loadOrderedPageIds(): void {
+        $value = $_POST["sitewide_pages_order"] ?? "";
+        if ($value != "") {
+            $this->orderedPageIds = array_map('intval', explode(',', $value));
+        }
     }
 
     private function loadSitewidePagesToDelete(): void {
