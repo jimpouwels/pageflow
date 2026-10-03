@@ -18,12 +18,9 @@ class TemplatePicker extends Pulldown {
 
     private function getOptions(Scope $scope): array {
         $options = array();
-        $templates = $this->templateService->getTemplatesByScope($scope);
-        foreach ($templates as $template) {
-            $templateVariants = $this->templateService->getTemplateVariantsForTemplate($template);
-            foreach ($templateVariants as $templateVariant) {
-                $options[] = array('name' => $templateVariant->getName(), 'value' => $templateVariant->getId());
-            }
+        
+        foreach ($this->templateService->getTemplateVariantsForScope($scope) as $templateVariant) {
+            $options[] = array('name' => $templateVariant->getName(), 'value' => $templateVariant->getId());
         }
         return $options;
     }

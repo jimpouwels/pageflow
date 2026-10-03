@@ -26,5 +26,7 @@ interface TemplateService {
 
     public function getTemplateVariantsForTemplate(Template $template): array;
 
+    public function getTemplateVariantsForScope(Scope $scope): array;
+
     public function getUnassignedTemplateVariants(): array;
 }

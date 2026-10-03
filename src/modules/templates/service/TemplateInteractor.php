@@ -52,6 +52,10 @@ class TemplateInteractor implements TemplateService {
         return $templateId ? $this->templateDao->getTemplate($templateId) : null;
     }
 
+    public function getTemplateVariantsForScope(Scope $scope): array {
+        return $this->templateDao->getTemplateVariantsByScope($scope);
+    }
+
     public function getTemplates(): array {
         return $this->templateDao->getTemplates();
     }
