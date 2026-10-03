@@ -3,8 +3,6 @@
 namespace Pageflow\Core\modules\sitewide_pages;
 
 use Pageflow\Core\core\model\Module;
-use Pageflow\Core\modules\pages\service\PageInteractor;
-use Pageflow\Core\modules\pages\service\PageService;
 use Pageflow\Core\modules\sitewide_pages\visuals\SitewidePageList;
 use Pageflow\Core\view\views\ActionButtonDelete;
 use Pageflow\Core\view\views\ModuleVisual;
@@ -12,16 +10,11 @@ use Pageflow\Core\view\views\TabMenu;
 
 class SitewidePagesModuleVisual extends ModuleVisual {
 
-    private static string $HEAD_INCLUDES_TEMPLATE = "sitewide_pages/templates/head_includes.tpl";
-    private Module $module;
     private SitewidePagesRequestHandler $requestHandler;
-    private PageService $pageService;
 
     public function __construct(Module $module) {
         parent::__construct($module);
-        $this->module = $module;
         $this->requestHandler = new SitewidePagesRequestHandler();
-        $this->pageDao = PageInteractor::getInstance();
     }
 
     public function getTemplateFilename(): string {
