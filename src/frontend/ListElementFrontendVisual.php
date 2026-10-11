@@ -2,7 +2,6 @@
 
 namespace Pageflow\Core\frontend;
 
-use Pageflow\Core\core\model\ElementHolder;
 use Pageflow\Core\database\dao\FunctionalImageDao;
 use Pageflow\Core\database\dao\FunctionalImageDaoMysql;
 use Pageflow\Core\elements\list_element\ListElement;
@@ -27,7 +26,7 @@ class ListElementFrontendVisual extends ElementFrontendVisual {
     private function renderListItems(): array {
         $listItems = array();
         
-        foreach ($this->getElement()->getListItems() as     $listItem) {
+        foreach ($this->getElement()->getListItems() as $listItem) {
             $item = ['text' => $this->toHtml($listItem->getText())];
             if ($listItem->getFunctionalImageId()) {
                 $fimg = $this->functionalImageDao->getFunctionalImage($listItem->getFunctionalImageId());

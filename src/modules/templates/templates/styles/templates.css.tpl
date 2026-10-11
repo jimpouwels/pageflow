@@ -12,8 +12,22 @@
 
 /* TEMPLATE LIST */
 
-.template_listing .last .admin_label {
+.template_listing .last .admin_form_field_v2 {
+    display: block;
+    margin-bottom: 0;
+}
+
+.template_listing .last .admin_label_wrapper {
     display: none;
+}
+
+.template_listing .last .admin_field_wrapper {
+    max-width: none;
+    text-align: center;
+}
+
+.template_listing .last .admin_field_checkbox {
+    margin: 0;
 }
 
 /* Template files list uses generic content_left_column styling */

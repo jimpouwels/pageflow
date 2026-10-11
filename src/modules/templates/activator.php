@@ -51,7 +51,7 @@ class TemplateModuleVisual extends ModuleVisual {
                 $actionButtons[] = new ActionButtonSave('update_template_variant');
             }
             $actionButtons[] = new ActionButtonAdd('add_template_variant');
-            if ($this->currentTemplateVariant) {
+            if ($this->currentTemplateVariant || $this->currentScope || $this->templateEditorRequestHandler->getShowUnassigned()) {
                 $actionButtons[] = new ActionButtonDelete('delete_template_variant');
             }
         } else if ($this->getCurrentTabId() == self::$TEMPLATE_TAB) {
