@@ -245,7 +245,10 @@ abstract class FrontendVisual {
         return !is_null($this->article) ? $this->article : $this->page;
     }
 
-    protected function toAnchorValue(string $value): string {
+    protected function toAnchorValue(?string $value): string {
+        if (!$value) {
+            return "";
+        }
         $anchorValue = strtolower($value);
         $anchorValue = str_replace("-", " ", $anchorValue);
         $anchorValue = str_replace("  ", " ", $anchorValue);

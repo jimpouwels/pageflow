@@ -1,0 +1,6 @@
+# GENERAL
+html_element_label: HTML
+html_element_scope_label: HTML Element
+
+# EDITOR
+html_element_editor_markup: HTML

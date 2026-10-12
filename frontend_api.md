@@ -53,6 +53,11 @@ Each item in `items`:
 |--------|--------|----------------------------|
 | title  | string | The separator's title      |
 
+### HtmlElementFrontendVisual (html_element scope)
+| Key    | Type   | Description                      |
+|--------|--------|----------------------------------|
+| html   | string | The raw HTML markup, as entered  |
+
 ### TableOfContentsElementFrontendVisual (table_of_contents_element scope)
 | Key    | Type   | Description                |
 |--------|--------|----------------------------|

@@ -364,6 +364,9 @@
             <query>ALTER TABLE templates ADD CONSTRAINT template_to_scope FOREIGN KEY template_to_scope (scope_id) REFERENCES scopes (id) ON DELETE SET NULL ON UPDATE CASCADE</query>
             <query>ALTER TABLE template_variants DROP COLUMN scope_id</query>
             <query>ALTER TABLE webforms_handlers ADD COLUMN order_nr int(10) DEFAULT 9999</query>
+            <query>CREATE TABLE html_elements_metadata (id int(10) unsigned NOT NULL AUTO_INCREMENT, markup LONGTEXT DEFAULT NULL, element_id int(10) unsigned NOT NULL, PRIMARY KEY (id), KEY html_elements_metadata_to_element (element_id), CONSTRAINT html_elements_metadata_to_element FOREIGN KEY (element_id) REFERENCES elements (id) ON DELETE CASCADE ON UPDATE CASCADE)</query>
+            <query>INSERT INTO scopes (identifier) VALUES ('html_element')</query>
+            <query>INSERT INTO element_types (classname, domain_object, scope_id, identifier, system_default) VALUES ('HtmlElement', 'HtmlElement.php', (SELECT id FROM scopes WHERE identifier = 'html_element'), 'html_element', 1)</query>
         </queries>
     </version>
 </versions>
